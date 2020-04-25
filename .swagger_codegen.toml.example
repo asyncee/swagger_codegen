@@ -1,0 +1,17 @@
+[swagger_codegen]
+endpoint = "swagger_codegen.parsing.endpoint.EndpointDescription"
+renderer = "swagger_codegen.render.package_renderer.PackageRenderer"
+
+[services]
+
+# Load api definition from filesystem.
+[services.api_1]
+uri = "apis/openapi.json"
+directory = "example"
+package = "my_api_1"
+
+# Load api definition from url.
+[services.petstore]
+uri = "http://petstore.swagger.io:8080/api/v3/openapi.json"
+directory = "example"
+package = "petstore"

@@ -1,0 +1,13 @@
+from __future__ import annotations
+
+from swagger_codegen.api.base import BaseApi
+
+{% for endpoint in api.endpoints -%}
+from . import {{ endpoint.name }}
+{% endfor -%}
+
+
+class {{ api.type_name }}(BaseApi):
+{%- for endpoint in api.endpoints %}
+    {{ endpoint.name }} = {{ endpoint.name }}.make_request
+{%- endfor -%}
