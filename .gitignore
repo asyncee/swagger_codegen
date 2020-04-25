@@ -1,4 +1,4 @@
-./*.json
+*.json
 .idea
 env
 *.egg-info
