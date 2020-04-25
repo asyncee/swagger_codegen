@@ -26,8 +26,8 @@ Type "help", "copyright", "credits" or "license" for more information.
 id=1 username='Swagger-Codegen' firstName=None lastName=None email=None password=None phone=None userStatus=0
 ```
 
-You can see example source code for [PetStore](http://petstore.swagger.io:8080/)
-Api in example directory of a project.
+You can see [example source code](https://github.com/asyncee/swagger_codegen/tree/master/example)
+for [PetStore](http://petstore.swagger.io:8080/) Api in example directory of a project.
 
 ### Work in progress
 Though library gives nice results for generated API, it is still in development.
