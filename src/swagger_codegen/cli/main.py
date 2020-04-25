@@ -21,13 +21,13 @@ app = typer.Typer()
 def generate(
     uri: str,
     package: str,
-    directory: Optional[str],
+    directory: Optional[str] = None,
     renderer: Optional[str] = None,
     endpoint: Optional[str] = None,
 ):
     directory = directory or "."
     renderer = renderer or qualname(PackageRenderer)
-    endpoint = import_class(endpoint) or EndpointDescription
+    endpoint = import_class(endpoint) if endpoint else EndpointDescription
 
     rich.print(
         f"Generating from [yellow]{uri}[/yellow] to [yellow]{directory} ({package})[/yellow]"
