@@ -1,0 +1,43 @@
+def make_request(self,
+{% if endpoint.body_request %}
+    {{ endpoint.body_request.name }}: {{ endpoint.body_request.data_type.python_type }},
+{% endif %}
+{% for argument in endpoint.arguments %}
+    {{ endpoint.make_variable_name(argument['name']) }}: {{ argument['type'] }} {%- if 'default' in argument %} = {{ argument['default'] }}{% endif %},
+{% endfor %}
+) -> {{ endpoint.return_type }}:
+    {% if endpoint.docstring %}"""{{ endpoint.docstring }}"""{% endif %}
+    m = ApiRequest(
+        method="{{ endpoint.method }}",
+        path="{{ endpoint.path }}".format(
+            {% for argument in endpoint.to_arguments(endpoint.endpoint.path_parameters) %}
+                {{  argument['name'] }}={{ endpoint.make_variable_name(argument['name']) }},
+            {% endfor %}
+        ),
+        content_type={% if endpoint.body_request %}"{{ endpoint.body_request.content_type }}"{% else %}None{% endif %},
+        body={% if endpoint.body_request %}{{ endpoint.body_request.name }}.dict(){% else %}None{% endif %},
+        headers=self._only_provided({
+        {%- for header in endpoint.to_arguments(endpoint.endpoint.headers)  %}
+            "{{ header['name'] }}": {{ endpoint.make_variable_name(header['name']) }},
+        {% endfor %}
+        }),
+        query_params=self._only_provided({
+            {%- for query in endpoint.to_arguments(endpoint.endpoint.query)  %}
+                "{{ query['name'] }}": {{ endpoint.make_variable_name(query['name']) }},
+            {% endfor %}
+        }),
+        cookies=self._only_provided({
+            {%- for cookie in endpoint.to_arguments(endpoint.endpoint.cookies)  %}
+                "{{ cookie['name'] }}": {{ endpoint.make_variable_name(cookie['name']) }},
+            {% endfor %}
+        }),
+    )
+    return self.make_request({
+    {% for status_code, value in endpoint.response_mapping.items() %}
+        "{{ status_code }}": {
+            {% for content_type, response_type in value.items() %}
+                "{{ content_type }}": {{ response_type }},
+            {% endfor %}
+        },
+    {% endfor %}
+    }, m)

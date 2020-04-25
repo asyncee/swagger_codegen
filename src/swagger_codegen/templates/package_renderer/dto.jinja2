@@ -1,0 +1,7 @@
+class {{ type.python_type }}(BaseModel):
+{%- for member in type.members %}
+    {{ member.member_name }}: {{ member.member_python_type }} {% if member.member_value %} = {{ member.member_value }}{% endif %}
+{%- endfor %}
+{% if type.should_update_forward_refs() %}
+{{ type.python_type }}.update_forward_refs()
+{% endif %}
