@@ -33,4 +33,4 @@ Api in example directory of a project.
 Though library gives nice results for generated API, it is still in development.
 Some tests are missing. API is a subject to change until stable release.
 
-Anyway backward compatibility will kept as most as possible.
+Anyway backward compatibility will be kept as most as possible.
