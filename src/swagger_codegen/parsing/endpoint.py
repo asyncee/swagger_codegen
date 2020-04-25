@@ -4,6 +4,7 @@ from typing import List
 from typing import Optional
 
 import attr
+from inflection import underscore
 from schemathesis.models import Endpoint
 
 from swagger_codegen.parsing.data_type_parser import make_data_type
@@ -149,8 +150,7 @@ class EndpointDescription:
         return sorted(arguments_, key=lambda arg: arg["required"] is False)
 
     def make_variable_name(self, original_name: str) -> str:
-        # todo: regexp
-        return original_name.replace("-", "_").lower()
+        return underscore(original_name.lower())
 
     def to_argument(self, name: str, schema: dict, is_required: bool):
         argument = {
