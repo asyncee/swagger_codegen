@@ -33,7 +33,7 @@ black = ["black"]
 all = ["aiohttp", "requests", "black"]
 
 [tool.poetry.scripts]
-swagger_codegen_python = 'swagger_codegen.cli.main:app'
+swagger_codegen = 'swagger_codegen.cli.main:app'
 
 [build-system]
 requires = ["poetry>=0.12"]
