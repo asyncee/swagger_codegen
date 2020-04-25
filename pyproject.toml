@@ -4,6 +4,11 @@ version = "0.1.0"
 description = "Generate API clients by parsing Swagger definitions"
 authors = ["asyncee"]
 license = "MIT"
+readme = "readme.md"
+homepage = "https://github.com/asyncee/swagger_codegen"
+repository = "https://github.com/asyncee/swagger_codegen"
+documentation = "https://github.com/asyncee/swagger_codegen"
+keywords = ["swagger-codegen", "openapi", "swagger", "pydantic"]
 
 [tool.poetry.dependencies]
 python = "^3.7"
