@@ -72,7 +72,12 @@ class PackageRenderer(Renderer):
         return apis
 
     def _render_client(self, apis: List[Api]):
-        (self._package_dir / "__init__.py").touch()
+        (self._package_dir / "__init__.py").write_text(
+"""from swagger_codegen.api.configuration import Configuration
+from .client import new_client
+"""
+        )
+
         content = self._render(self._client_template, {"apis": apis})
         (self._package_dir / "client.py").write_text(content)
 
