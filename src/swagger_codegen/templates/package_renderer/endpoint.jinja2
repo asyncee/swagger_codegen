@@ -20,17 +20,17 @@ def make_request(self,
         {%- for header in endpoint.to_arguments(endpoint.endpoint.headers)  %}
             "{{ header['name'] }}": {{ endpoint.make_variable_name(header['name']) }},
         {% endfor %}
-        }),
+        }, exclude_none=True),
         query_params=self._only_provided({
             {%- for query in endpoint.to_arguments(endpoint.endpoint.query)  %}
                 "{{ query['name'] }}": {{ endpoint.make_variable_name(query['name']) }},
             {% endfor %}
-        }),
+        }, exclude_none=True),
         cookies=self._only_provided({
             {%- for cookie in endpoint.to_arguments(endpoint.endpoint.cookies)  %}
                 "{{ cookie['name'] }}": {{ endpoint.make_variable_name(cookie['name']) }},
             {% endfor %}
-        }),
+        }, exclude_none=True),
     )
     return self.make_request({
     {% for status_code, value in endpoint.response_mapping.items() %}

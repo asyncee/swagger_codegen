@@ -61,5 +61,10 @@ class BaseApi:
         ) or response_mapping.get("default")
         return content_types.get(response.content_type)
 
-    def _only_provided(self, dct: dict) -> dict:
-        return {k: v for k, v in dct.items() if v is not ...}
+    def _only_provided(self, dct: dict, exclude_none: bool) -> dict:
+        def keep_value(value) -> bool:
+            if value is ...:
+                return False
+            return exclude_none and value is not None
+
+        return {k: v for k, v in dct.items() if keep_value(v)}
