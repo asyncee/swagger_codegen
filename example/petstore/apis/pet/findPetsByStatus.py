@@ -36,9 +36,9 @@ def make_request(self, status: str = "available",) -> typing.List[Pet]:
         path="/api/v3/pet/findByStatus".format(),
         content_type=None,
         body=None,
-        headers=self._only_provided({}),
-        query_params=self._only_provided({"status": status,}),
-        cookies=self._only_provided({}),
+        headers=self._only_provided({}, exclude_none=True),
+        query_params=self._only_provided({"status": status,}, exclude_none=True),
+        cookies=self._only_provided({}, exclude_none=True),
     )
     return self.make_request(
         {

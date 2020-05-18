@@ -17,8 +17,8 @@ def make_request(self, orderid: int,) -> None:
         path="/api/v3/store/order/{orderId}".format(orderId=orderid,),
         content_type=None,
         body=None,
-        headers=self._only_provided({}),
-        query_params=self._only_provided({}),
-        cookies=self._only_provided({}),
+        headers=self._only_provided({}, exclude_none=True),
+        query_params=self._only_provided({}, exclude_none=True),
+        cookies=self._only_provided({}, exclude_none=True),
     )
     return self.make_request({}, m)
