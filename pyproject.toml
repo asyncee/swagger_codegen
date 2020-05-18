@@ -24,7 +24,7 @@ schemathesis = "1.1.0"
 
 aiohttp = { version = "*", optional = true }
 requests = { version = "*", optional = true }
-black = { version = "*", allows-prereleases = true, optional = true }
+black = { version = "*", allow-prereleases = true, optional = true }
 
 [tool.poetry.dev-dependencies]
 rich = "^0.8.8"
