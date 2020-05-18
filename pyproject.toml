@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "swagger-codegen"
-version = "0.1.4"
+version = "0.1.5"
 description = "Generate API clients by parsing Swagger definitions"
 authors = ["asyncee"]
 license = "MIT"
@@ -20,11 +20,11 @@ typer = "^0.1.1"
 toml = "^0.10.0"
 rich = "^0.8.11"
 inflection = "^0.4.0"
+schemathesis = "1.1.0"
 
 aiohttp = { version = "*", optional = true }
 requests = { version = "*", optional = true }
-black = { version = "^19.10b0", optional = true }
-schemathesis = "1.1.0"
+black = { version = "*", allows-prereleases = true, optional = true }
 
 [tool.poetry.dev-dependencies]
 rich = "^0.8.8"
