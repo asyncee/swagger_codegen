@@ -17,8 +17,8 @@ def make_request(self, petid: int, api_key: str = ...,) -> None:
         path="/api/v3/pet/{petId}".format(petId=petid,),
         content_type=None,
         body=None,
-        headers=self._only_provided({"api_key": api_key,}),
-        query_params=self._only_provided({}),
-        cookies=self._only_provided({}),
+        headers=self._only_provided({"api_key": api_key,}, exclude_none=True),
+        query_params=self._only_provided({}, exclude_none=True),
+        cookies=self._only_provided({}, exclude_none=True),
     )
     return self.make_request({}, m)
