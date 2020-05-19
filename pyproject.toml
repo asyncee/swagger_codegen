@@ -11,7 +11,7 @@ documentation = "https://github.com/asyncee/swagger_codegen"
 keywords = ["swagger-codegen", "openapi", "swagger", "pydantic"]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.8"
 pydantic = "^1.4"
 multidict = "^4.7.5"
 jinja2 = "^2.11.1"
