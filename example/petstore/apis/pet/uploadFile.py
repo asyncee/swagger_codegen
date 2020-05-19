@@ -12,8 +12,8 @@ from swagger_codegen.api.request import ApiRequest
 
 class ApiResponse(BaseModel):
     code: typing.Optional[int] = None
-    type: typing.Optional[str] = None
     message: typing.Optional[str] = None
+    type: typing.Optional[str] = None
 
 
 def make_request(

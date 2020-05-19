@@ -21,12 +21,12 @@ class Category(BaseModel):
 
 
 class Pet(BaseModel):
+    category: typing.Optional[Category] = None
     id: typing.Optional[int] = None
     name: str
-    category: typing.Optional[Category] = None
     photoUrls: typing.List[str]
-    tags: typing.Optional[typing.List[Tag]] = None
     status: typing.Optional[str] = None
+    tags: typing.Optional[typing.List[Tag]] = None
 
 
 def make_request(self, petid: int,) -> Pet:

@@ -11,13 +11,13 @@ from swagger_codegen.api.request import ApiRequest
 
 
 class User(BaseModel):
-    id: typing.Optional[int] = None
-    username: typing.Optional[str] = None
-    firstName: typing.Optional[str] = None
-    lastName: typing.Optional[str] = None
     email: typing.Optional[str] = None
+    firstName: typing.Optional[str] = None
+    id: typing.Optional[int] = None
+    lastName: typing.Optional[str] = None
     password: typing.Optional[str] = None
     phone: typing.Optional[str] = None
+    username: typing.Optional[str] = None
     userStatus: typing.Optional[int] = None
 
 

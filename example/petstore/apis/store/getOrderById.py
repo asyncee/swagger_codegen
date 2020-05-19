@@ -11,12 +11,12 @@ from swagger_codegen.api.request import ApiRequest
 
 
 class Order(BaseModel):
+    complete: typing.Optional[bool] = None
     id: typing.Optional[int] = None
     petId: typing.Optional[int] = None
     quantity: typing.Optional[int] = None
     shipDate: typing.Optional[datetime.datetime] = None
     status: typing.Optional[str] = None
-    complete: typing.Optional[bool] = None
 
 
 def make_request(self, orderid: int,) -> Order:
