@@ -603,7 +603,7 @@ black = ["black"]
 sync = ["requests"]
 
 [metadata]
-content-hash = "363f7ab96337ce566d4ccb2633e0147cc81f35c7ae6835b01eceeae852464dca"
+content-hash = "f41147b35fda484d11d1ab32f4344fee902d8eaa320946bb4e761e3e3799c60b"
 python-versions = "^3.7"
 
 [metadata.files]
