@@ -2,17 +2,23 @@ from functools import partial
 
 import aiohttp
 from aiohttp import ContentTypeError
-from multidict import MultiDict
 
 from swagger_codegen.api.adapter.base import HttpClientAdapter
-from swagger_codegen.api.types import APPLICATION_JSON
+from swagger_codegen.api.adapter.params_converter import AiohttpParamsConverter
+from swagger_codegen.api.adapter.params_converter import ParamsConverter
 from swagger_codegen.api.request import ApiRequest
 from swagger_codegen.api.response import ApiResponse
+from swagger_codegen.api.types import APPLICATION_JSON
 
 
 class AiohttpAdapter(HttpClientAdapter):
-    def __init__(self, session: aiohttp.ClientSession):
+    def __init__(
+        self,
+        session: aiohttp.ClientSession,
+        params_converter: ParamsConverter = AiohttpParamsConverter(),
+    ):
         self._session = session
+        self._params_converter = params_converter
 
     def call(self, api_request: ApiRequest) -> ApiResponse:
         methods = {
@@ -38,7 +44,9 @@ class AiohttpAdapter(HttpClientAdapter):
     async def _write(self, make_request, api_request: ApiRequest):
         params = dict(
             url=api_request.path,
-            params=self._to_aiohttp_multidict(api_request.query_params),
+            params=self._params_converter.convert_query_params(
+                api_request.query_params
+            ),
             headers=api_request.headers,
             cookies=api_request.cookies,
         )
@@ -67,20 +75,3 @@ class AiohttpAdapter(HttpClientAdapter):
             status_code=int(response.status),
             content_type=response.content_type,
         )
-
-    def _to_aiohttp_multidict(self, dct: dict) -> MultiDict:
-        """
-        Convert regular dict into aiohttp-specific MultiDict.
-
-        Aiohttp does not support list or tuple parameters,
-        so values of such parameters must be added one-by-one
-        via MultiDict.add.
-        """
-        d = MultiDict()
-        for k, v in dct.items():
-            if isinstance(v, (list, tuple)):
-                for el in v:
-                    d.add(k, el)
-            else:
-                d.add(k, v)
-        return d
