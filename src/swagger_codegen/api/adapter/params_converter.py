@@ -27,7 +27,7 @@ class DefaultParamsConverter(ParamsConverter):
         default_handlers = {
             list: self.handle_list,
             tuple: self.handle_tuple,
-            None: self.handle_none,
+            type(None): self.handle_none,
             dt.datetime: self.handle_datetime,
             dt.date: self.handle_date,
         }
@@ -48,7 +48,7 @@ class DefaultParamsConverter(ParamsConverter):
     def get_result_container(self) -> MutableMapping:
         return {}
 
-    def handle_none(self, result: MutableMapping):
+    def handle_none(self, result: MutableMapping, key: str, value):
         # Do not serialize None to query parameters.
         pass
 

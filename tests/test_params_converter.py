@@ -14,6 +14,7 @@ def params():
         "datetime": dt.datetime(2020, 1, 1, 12, 0, 5),
         "list": [1, 2, 3],
         "tuple": [3, 4, 5],
+        "none": None,
     }
 
 
