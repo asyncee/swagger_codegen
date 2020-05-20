@@ -3,14 +3,22 @@ from functools import partial
 import requests
 
 from swagger_codegen.api.adapter.base import HttpClientAdapter
-from swagger_codegen.api.types import APPLICATION_JSON
+from swagger_codegen.api.adapter.params_converter import DefaultParamsConverter
+from swagger_codegen.api.adapter.params_converter import ParamsConverter
 from swagger_codegen.api.request import ApiRequest
 from swagger_codegen.api.response import ApiResponse
+from swagger_codegen.api.types import APPLICATION_JSON
 
 
 class RequestsAdapter(HttpClientAdapter):
-    def __init__(self, session: requests.Session = None, debug: bool = False):
+    def __init__(
+        self,
+        session: requests.Session = None,
+        params_converter: ParamsConverter = DefaultParamsConverter(),
+        debug: bool = False,
+    ):
         self._session = session or requests.Session()
+        self._params_converter = params_converter
         if debug:
             self._enable_debug()
 
@@ -29,7 +37,9 @@ class RequestsAdapter(HttpClientAdapter):
     def _read(self, make_request, api_request: ApiRequest):
         response = make_request(
             url=api_request.path,
-            params=api_request.query_params,
+            params=self._params_converter.convert_query_params(
+                api_request.query_params
+            ),
             headers=api_request.headers,
             cookies=api_request.cookies,
         )
