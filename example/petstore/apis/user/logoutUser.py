@@ -17,8 +17,8 @@ def make_request(self,) -> None:
         path="/api/v3/user/logout".format(),
         content_type=None,
         body=None,
-        headers=self._only_provided({}, exclude_none=True),
-        query_params=self._only_provided({}, exclude_none=True),
-        cookies=self._only_provided({}, exclude_none=True),
+        headers=self._only_provided({}),
+        query_params=self._only_provided({}),
+        cookies=self._only_provided({}),
     )
     return self.make_request({}, m)
