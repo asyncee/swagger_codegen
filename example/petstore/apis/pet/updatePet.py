@@ -36,9 +36,9 @@ def make_request(self, __request__: Pet,) -> Pet:
         path="/api/v3/pet".format(),
         content_type="application/json",
         body=__request__.dict(),
-        headers=self._only_provided({}, exclude_none=True),
-        query_params=self._only_provided({}, exclude_none=True),
-        cookies=self._only_provided({}, exclude_none=True),
+        headers=self._only_provided({}),
+        query_params=self._only_provided({}),
+        cookies=self._only_provided({}),
     )
     return self.make_request(
         {"200": {"application/json": Pet, "application/xml": Pet,},}, m

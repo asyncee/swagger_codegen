@@ -36,9 +36,9 @@ def make_request(self, tags: typing.List[str] = ...,) -> typing.List[Pet]:
         path="/api/v3/pet/findByTags".format(),
         content_type=None,
         body=None,
-        headers=self._only_provided({}, exclude_none=True),
-        query_params=self._only_provided({"tags": tags,}, exclude_none=True),
-        cookies=self._only_provided({}, exclude_none=True),
+        headers=self._only_provided({}),
+        query_params=self._only_provided({"tags": tags,}),
+        cookies=self._only_provided({}),
     )
     return self.make_request(
         {
