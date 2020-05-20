@@ -35,7 +35,9 @@ class AiohttpAdapter(HttpClientAdapter):
     async def _read(self, make_request, api_request: ApiRequest):
         async with make_request(
             url=api_request.path,
-            params=self._to_aiohttp_multidict(api_request.query_params),
+            params=self._params_converter.convert_query_params(
+                api_request.query_params
+            ),
             headers=api_request.headers,
             cookies=api_request.cookies,
         ) as response:
