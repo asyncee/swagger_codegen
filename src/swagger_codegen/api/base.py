@@ -59,6 +59,8 @@ class BaseApi:
         content_types = response_mapping.get(
             str(response.status_code)
         ) or response_mapping.get("default")
+        if content_types is None:
+            return None
         return content_types.get(response.content_type)
 
     def _only_provided(self, dct: dict) -> dict:
