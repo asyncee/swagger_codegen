@@ -1,4 +1,4 @@
-def make_request(self,
+def make_request(self: BaseApi,
 {% if endpoint.body_request %}
     {{ endpoint.body_request.name }}: {{ endpoint.body_request.data_type.python_type }},
 {% endif %}

@@ -3,6 +3,8 @@ import logging
 from typing import Optional
 
 from swagger_codegen.api.client import ApiClient
+from swagger_codegen.api.configuration import Configuration
+from swagger_codegen.api.configuration import Hook
 from swagger_codegen.api.exceptions import ErrorApiResponse
 from swagger_codegen.api.request import ApiRequest
 from swagger_codegen.api.response import ApiResponse
@@ -18,14 +20,19 @@ class BaseApi:
     def __init__(
         self,
         client: ApiClient,
+        configuration: Configuration,
         raise_for_status: bool = True,
         deserializer: ResponseDeserializer = DefaultResponseDeserializer(),
     ):
         self._client = client
+        self._configuration = configuration
         self._raise_for_status = raise_for_status
         self._deserializer = deserializer
 
     def make_request(self, response_mapping: ResponseMapping, api_request: ApiRequest):
+        for request_hook in self._configuration.hooks.get(Hook.request, []):
+            api_request = request_hook(api_request)
+
         result = self._client.call_api(api_request)
 
         if inspect.iscoroutine(result):

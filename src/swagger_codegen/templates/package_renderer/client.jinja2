@@ -25,6 +25,6 @@ def new_client(
         configuration,
         client=client,
         {% for api in apis %}
-        {{ api.name }}={{ api.type_name }}(client){% if not loop.last %},{% endif %}
+        {{ api.name }}={{ api.type_name }}(client, configuration){% if not loop.last %},{% endif %}
         {% endfor %}
     )

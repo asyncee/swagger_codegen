@@ -17,6 +17,5 @@ class ApiClient:
     ) -> Union[ApiResponse, Coroutine[None, None, ApiResponse]]:
         method = api_request.clone(
             path=self._configuration.host + api_request.path,
-            headers={**api_request.headers, **self._configuration.headers},
         )
         return self._adapter.call(method)
