@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "swagger-codegen"
-version = "0.1.11"
+version = "0.1.12"
 description = "Generate API clients by parsing Swagger definitions"
 authors = ["asyncee"]
 license = "MIT"
