@@ -17,6 +17,9 @@ from .setup_logging import setup_logging
 app = typer.Typer()
 
 
+logger = logging.getLogger(__name__)
+
+
 @app.command()
 def generate(
     uri: str,
@@ -56,13 +59,16 @@ def build(config: str = ".swagger_codegen.toml"):
     renderer_import_path = cfg.get("swagger_codegen", {}).get("renderer")
 
     for service_name, service_settings in services.items():
-        generate(
-            uri=service_settings["uri"],
-            package=service_settings["package"],
-            directory=service_settings.get("directory"),
-            renderer=renderer_import_path,
-            endpoint=endpoint_import_path,
-        )
+        try:
+            generate(
+                uri=service_settings["uri"],
+                package=service_settings["package"],
+                directory=service_settings.get("directory"),
+                renderer=renderer_import_path,
+                endpoint=endpoint_import_path,
+            )
+        except Exception:
+            logger.exception("Failed to generate client for %r", service_name)
 
 
 @app.callback()
