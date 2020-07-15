@@ -3,15 +3,15 @@ import logging
 from typing import Optional
 
 from swagger_codegen.api.client import ApiClient
-from swagger_codegen.api.configuration import Configuration
-from swagger_codegen.api.configuration import Hook
+from swagger_codegen.api.configuration import Configuration, Hook
 from swagger_codegen.api.exceptions import ErrorApiResponse
 from swagger_codegen.api.request import ApiRequest
 from swagger_codegen.api.response import ApiResponse
-from swagger_codegen.api.response_deserializer import DefaultResponseDeserializer
-from swagger_codegen.api.response_deserializer import ResponseDeserializer
-from swagger_codegen.api.types import ResponseMapping
-from swagger_codegen.api.types import ResponseType
+from swagger_codegen.api.response_deserializer import (
+    DefaultResponseDeserializer,
+    ResponseDeserializer,
+)
+from swagger_codegen.api.types import ResponseMapping, ResponseType
 
 logger = logging.getLogger(__name__)
 
@@ -55,7 +55,7 @@ class BaseApi:
         deserialized_response = self._deserializer.deserialize(
             response_type, api_response.body
         )
-        if self._raise_for_status and api_response.is_error() >= 400:
+        if self._raise_for_status and api_response.is_error():
             raise ErrorApiResponse(api_request, api_response, deserialized_response)
 
         return deserialized_response
@@ -66,9 +66,11 @@ class BaseApi:
         content_types = response_mapping.get(
             str(response.status_code)
         ) or response_mapping.get("default")
+
         if content_types is None:
             return None
-        return content_types.get(response.content_type)
+
+        return content_types.get(response.content_type, content_types.get("default"))
 
     def _only_provided(self, dct: dict) -> dict:
         return {k: v for k, v in dct.items() if v is not ...}

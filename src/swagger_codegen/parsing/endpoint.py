@@ -61,14 +61,23 @@ class EndpointDescription:
 
         responses = list(self.endpoint.definition["responses"].items())
         default_response = self.endpoint.definition["responses"].get("default")
+
         if default_response and "content" in default_response:
             responses.extend(list(default_response.items()))
 
-        for status_code, response in responses:
-            if "content" not in response:
+        for status_code, response_definition in responses:
+            if "content" not in response_definition:
+                empty_response = EndpointResponse(
+                    status_code=status_code,
+                    data_type=make_data_type({}),
+                    definition={},
+                    content_type="default",
+                )
+                if empty_response not in _responses:
+                    _responses.append(empty_response)
                 continue
 
-            for content_type, response_schema in response["content"].items():
+            for content_type, response_schema in response_definition["content"].items():
                 response = EndpointResponse(
                     status_code=status_code,
                     data_type=make_data_type(response_schema["schema"]),
@@ -78,13 +87,13 @@ class EndpointDescription:
                 if response not in _responses:
                     _responses.append(response)
 
-        return sorted(_responses, key=lambda rk: (rk.status_code, rk.content_type))
+        return sorted(_responses, key=lambda o: (o.status_code, o.content_type))
 
     @property
     def response_mapping(self):
         result = defaultdict(dict)
         for status_code, responses_by_status in groupby(
-            self.responses, key=lambda rl: rl.status_code
+            self.responses, key=lambda o: o.status_code
         ):
             for response in responses_by_status:
                 result[status_code][
