@@ -11,7 +11,6 @@ class Hook(enum.Enum):
 
 RequestHook = Callable[[ApiRequest], ApiRequest]
 RequestHooks = List[RequestHook]
-
 Hooks = Dict[Literal[Hook.request], RequestHooks]
 
 
@@ -30,7 +29,7 @@ class Configuration:
     from swagger_codegen.api.configuration import Hook
 
     def add_api_key(request: ApiRequest) -> ApiRequest:
-        return request.clone(headers=dict(request.headers, {'ApiKey': 'abcd'}))
+        return request.clone(headers=dict(request.headers, **{'ApiKey': 'abcd'}))
 
     configuration=Configuration(
         host=host, hooks={Hook.request: [add_api_key]}
