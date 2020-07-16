@@ -1,14 +1,16 @@
 import inspect
 import logging
 from typing import Optional
+from typing import cast
 
 from swagger_codegen.api.client import ApiClient
-from swagger_codegen.api.configuration import Configuration, Hook
+from swagger_codegen.api.configuration import Configuration, Hook, RequestHooks
 from swagger_codegen.api.exceptions import ErrorApiResponse
 from swagger_codegen.api.request import ApiRequest
 from swagger_codegen.api.response import ApiResponse
 from swagger_codegen.api.response_deserializer import (
     DefaultResponseDeserializer,
+    DeserializedResponse,
     ResponseDeserializer,
 )
 from swagger_codegen.api.types import ResponseMapping, ResponseType
@@ -29,8 +31,11 @@ class BaseApi:
         self._raise_for_status = raise_for_status
         self._deserializer = deserializer
 
-    def make_request(self, response_mapping: ResponseMapping, api_request: ApiRequest):
-        for request_hook in self._configuration.hooks.get(Hook.request, []):
+    def make_request(
+        self, response_mapping: ResponseMapping, api_request: ApiRequest
+    ) -> DeserializedResponse:
+        request_hooks: RequestHooks = self._configuration.hooks.get(Hook.request, [])
+        for request_hook in request_hooks:
             api_request = request_hook(api_request)
 
         result = self._client.call_api(api_request)
@@ -38,19 +43,21 @@ class BaseApi:
         if inspect.iscoroutine(result):
 
             async def _wrap_coroutine():
-                api_response = await result
+                api_response: ApiResponse = await result
                 return self._handle_result(response_mapping, api_request, api_response)
 
             return _wrap_coroutine()
 
-        return self._handle_result(response_mapping, api_request, result)
+        return self._handle_result(
+            response_mapping, api_request, cast(ApiResponse, result)
+        )
 
     def _handle_result(
         self,
         response_mapping: ResponseMapping,
         api_request: ApiRequest,
         api_response: ApiResponse,
-    ):
+    ) -> DeserializedResponse:
         response_type = self._select_response_type(response_mapping, api_response)
         deserialized_response = self._deserializer.deserialize(
             response_type, api_response.body

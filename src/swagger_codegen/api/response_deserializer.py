@@ -1,20 +1,25 @@
 import abc
-from typing import Any
-from typing import Optional
+from typing import Any, Optional
 
 import pydantic
 
 from swagger_codegen.api.types import ResponseType
 
+DeserializedResponse = Optional[Any]
+
 
 class ResponseDeserializer(abc.ABC):
     @abc.abstractmethod
-    def deserialize(self, deserialize_to: ResponseType, model_body):
+    def deserialize(
+        self, deserialize_to: ResponseType, model_body
+    ) -> DeserializedResponse:
         pass
 
 
 class DefaultResponseDeserializer(ResponseDeserializer):
-    def deserialize(self, deserialize_to: ResponseType, model_body) -> Optional[Any]:
+    def deserialize(
+        self, deserialize_to: ResponseType, model_body
+    ) -> DeserializedResponse:
         if deserialize_to is None:
             return None
 
