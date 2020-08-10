@@ -30,7 +30,13 @@ You can see [example source code](https://github.com/asyncee/swagger_codegen/tre
 for [PetStore](http://petstore.swagger.io:8080/) Api in example directory of a project.
 
 ### Work in progress
+
 Though library gives nice results for generated API, it is still in development.
 Some tests are missing. API is a subject to change until stable release.
 
 Anyway backward compatibility will be kept as most as possible.
+
+The code in not optimized yet and mostly dirty because the project was born
+as a holiday prototype.
+
+Also `example` directory may be out of sync with actual generated code.
