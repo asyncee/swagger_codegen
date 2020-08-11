@@ -59,7 +59,7 @@ Some tests are missing. API is a subject to change until stable release.
 
 Anyway backward compatibility will be kept as most as possible.
 
-The code in not optimized yet and mostly dirty because the project was born
+The code is not optimized yet and mostly dirty because the project was born
 as a holiday prototype.
 
 Also `example` directory may be out of sync with actual generated code.
