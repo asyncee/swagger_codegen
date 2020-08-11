@@ -1,0 +1,34 @@
+from pathlib import Path
+from setuptools import setup
+from setuptools import find_packages
+
+
+HERE = Path(__file__).absolute().parent
+
+with (HERE / 'README.md').open() as f:
+    README = f.read()
+
+
+# Setup
+# ----------------------------
+
+setup(name='{{ package_name }}',
+      version='{{ package_version }}',
+      description='{{ package_description }}',
+      long_description=README,
+      classifiers=[
+          'Intended Audience :: Developers',
+          'Programming Language :: Python',
+          'Programming Language :: Python :: 3',
+          'Operating System :: POSIX',
+          'Topic :: Internet :: WWW/HTTP',
+      ],
+      keywords='web',
+      packages=find_packages(exclude=['tests', 'tests.*']),
+      include_package_data=True,
+      zip_safe=False,
+      test_suite='tests',
+      tests_require=['pytest', 'coverage', 'wheel'],
+      install_requires=['pydantic', 'swagger_codegen'],
+      entry_points={}
+    )

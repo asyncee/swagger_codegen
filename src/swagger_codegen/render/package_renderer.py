@@ -24,6 +24,8 @@ class PackageRenderer(Renderer):
         endpoint_dto_template="package_renderer/dto.jinja2",
         client_template="package_renderer/client.jinja2",
         endpoint_imports_template="package_renderer/endpoint_imports.jinja2",
+        setup_py_template="package_renderer/setup_py.jinja2",
+        manifest_in_template="package_renderer/manifest_in.jinja2",
     ):
         self._directory = Path(directory).resolve()
 
@@ -36,12 +38,18 @@ class PackageRenderer(Renderer):
         if not package or package == ".":
             raise ValueError(f"{package!r} is invalid package name")
 
-        self._package_dir = self._directory / package
+        self._package_name = package
+        self._project_dir = self._directory / self._package_name
+        # second level of nesting is necessary to separate `setup.py` and meta-files (readme, tests etc)
+        # from the package files (runtime modules)
+        self._package_dir = self._project_dir / self._package_name
         self._api_template = api_template
         self._endpoint_template = endpoint_template
         self._endpoint_dto_template = endpoint_dto_template
         self._client_template = client_template
         self._endpoint_imports_template = endpoint_imports_template
+        self._setup_py_template = setup_py_template
+        self._manifest_in_template = manifest_in_template
 
     def render(self, endpoints: List[EndpointDescription]):
         if self._package_dir.exists():
@@ -54,6 +62,7 @@ class PackageRenderer(Renderer):
             self._render_api(api)
 
         self._render_client(apis)
+        self._render_setuptools(apis)
 
     def _get_apis(self, endpoints: List[EndpointDescription]) -> List[Api]:
         endpoints_by_tags = defaultdict(list)
@@ -80,6 +89,26 @@ from .client import new_client
 
         content = self._render(self._client_template, {"apis": apis})
         (self._package_dir / "client.py").write_text(content)
+
+    def _render_setuptools(self, apis: List[Api]) -> None:
+        """ Render files necessary for packaging the new client library with setuptools.
+        """
+        (self._project_dir / "README.md").write_text(
+            "# Client Library"
+        )
+        ctx = {
+            "package_name": self._package_name,
+            "package_version": "1.0.0",
+            "package_description": self._package_name,
+        }
+        # render <project>/setup.py
+        (self._project_dir / "setup.py").write_text(
+            self._render(self._setup_py_template, ctx)
+        )
+        # render <project>/MANIFEST.in necessary for setuptools auto-collector
+        (self._project_dir / "MANIFEST.in").write_text(
+            self._render(self._manifest_in_template, ctx)
+        )
 
     def _render_api(self, api: Api):
         api_dir = self._package_dir / "apis" / api.name
