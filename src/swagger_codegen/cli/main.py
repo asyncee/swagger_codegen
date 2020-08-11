@@ -3,15 +3,14 @@ from typing import Optional
 
 import rich
 import typer
-
 from swagger_codegen.cli.config import load_config
-from swagger_codegen.cli.imports import import_class
-from swagger_codegen.cli.imports import qualname
+from swagger_codegen.cli.imports import import_class, qualname
 from swagger_codegen.cli.setup_renderer import setup_renderer
 from swagger_codegen.parsing.endpoint import EndpointDescription
 from swagger_codegen.parsing.loaders import load_base_schema
 from swagger_codegen.parsing.parse import endpoints_from_base_schema
-from swagger_codegen.render.package_renderer import PackageRenderer
+from swagger_codegen.render.renderers.package import PackageRenderer
+
 from .setup_logging import setup_logging
 
 app = typer.Typer()
