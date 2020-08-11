@@ -17,6 +17,10 @@ class Blackify(PostProcessor):
                 content, fast=False, mode=black.FileMode(),
             )
         except black.InvalidInput as e:
-            logger.error(e)
+            logger.warning(
+                f"Black failed to post-process file with an error: {e}. "
+                f"Currently it happens on non python files, "
+                f"you can safely ignore this message."
+            )
 
         return content
