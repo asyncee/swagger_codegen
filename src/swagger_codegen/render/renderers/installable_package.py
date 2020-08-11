@@ -6,7 +6,7 @@ from ..api import Api
 from .package import PackageRenderer
 
 
-class DistributablePackageRenderer(PackageRenderer):
+class InstallablePackageRenderer(PackageRenderer):
     def __init__(
         self,
         *args,
@@ -14,7 +14,7 @@ class DistributablePackageRenderer(PackageRenderer):
         manifest_in_template="package_renderer/manifest_in.jinja2",
         **kwargs,
     ):
-        super(DistributablePackageRenderer, self).__init__(*args, **kwargs)
+        super(InstallablePackageRenderer, self).__init__(*args, **kwargs)
 
         self._package_dir = self._project_dir / self._package_name
         self._setup_py_template = setup_py_template

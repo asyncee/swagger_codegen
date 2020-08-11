@@ -1,7 +1,7 @@
 [swagger_codegen]
 endpoint = "swagger_codegen.parsing.endpoint.EndpointDescription"
-renderer = "swagger_codegen.render.renderers.package.PackageRenderer"
-#renderer = "swagger_codegen.render.renderers.distributable_package.DistributablePackageRenderer"
+#renderer = "swagger_codegen.render.renderers.package.PackageRenderer"
+renderer = "swagger_codegen.render.renderers.installable_package.InstallablePackageRenderer"
 
 [services]
 
