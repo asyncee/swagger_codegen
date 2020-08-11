@@ -7,6 +7,7 @@ import typing
 
 from pydantic import BaseModel
 
+from swagger_codegen.api.base import BaseApi
 from swagger_codegen.api.request import ApiRequest
 
 
@@ -17,7 +18,7 @@ class ApiResponse(BaseModel):
 
 
 def make_request(
-    self, __request__: bytes, petid: int, additionalmetadata: str = ...,
+    self: BaseApi, __request__: bytes, petid: int, additionalmetadata: str = ...,
 ) -> ApiResponse:
     """uploads an image"""
     m = ApiRequest(

@@ -7,6 +7,7 @@ import typing
 
 from pydantic import BaseModel
 
+from swagger_codegen.api.base import BaseApi
 from swagger_codegen.api.request import ApiRequest
 
 
@@ -29,7 +30,7 @@ class Pet(BaseModel):
     tags: typing.Optional[typing.List[Tag]] = None
 
 
-def make_request(self, tags: typing.List[str] = ...,) -> typing.List[Pet]:
+def make_request(self: BaseApi, tags: typing.List[str] = ...,) -> typing.List[Pet]:
     """Finds Pets by tags"""
     m = ApiRequest(
         method="GET",
@@ -46,6 +47,7 @@ def make_request(self, tags: typing.List[str] = ...,) -> typing.List[Pet]:
                 "application/json": typing.List[Pet],
                 "application/xml": typing.List[Pet],
             },
+            "400": {"default": None,},
         },
         m,
     )

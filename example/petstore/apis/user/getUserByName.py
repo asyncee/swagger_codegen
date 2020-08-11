@@ -7,6 +7,7 @@ import typing
 
 from pydantic import BaseModel
 
+from swagger_codegen.api.base import BaseApi
 from swagger_codegen.api.request import ApiRequest
 
 
@@ -21,7 +22,7 @@ class User(BaseModel):
     userStatus: typing.Optional[int] = None
 
 
-def make_request(self, username: str,) -> User:
+def make_request(self: BaseApi, username: str,) -> User:
     """Get user by user name"""
     m = ApiRequest(
         method="GET",
@@ -33,5 +34,10 @@ def make_request(self, username: str,) -> User:
         cookies=self._only_provided({}),
     )
     return self.make_request(
-        {"200": {"application/json": User, "application/xml": User,},}, m
+        {
+            "200": {"application/json": User, "application/xml": User,},
+            "400": {"default": None,},
+            "404": {"default": None,},
+        },
+        m,
     )

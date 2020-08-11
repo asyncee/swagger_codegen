@@ -7,6 +7,7 @@ import typing
 
 from pydantic import BaseModel
 
+from swagger_codegen.api.base import BaseApi
 from swagger_codegen.api.request import ApiRequest
 
 
@@ -19,7 +20,7 @@ class Order(BaseModel):
     status: typing.Optional[str] = None
 
 
-def make_request(self, orderid: int,) -> Order:
+def make_request(self: BaseApi, orderid: int,) -> Order:
     """Find purchase order by ID"""
     m = ApiRequest(
         method="GET",
@@ -31,5 +32,10 @@ def make_request(self, orderid: int,) -> Order:
         cookies=self._only_provided({}),
     )
     return self.make_request(
-        {"200": {"application/json": Order, "application/xml": Order,},}, m
+        {
+            "200": {"application/json": Order, "application/xml": Order,},
+            "400": {"default": None,},
+            "404": {"default": None,},
+        },
+        m,
     )

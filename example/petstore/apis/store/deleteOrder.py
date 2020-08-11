@@ -7,10 +7,11 @@ import typing
 
 from pydantic import BaseModel
 
+from swagger_codegen.api.base import BaseApi
 from swagger_codegen.api.request import ApiRequest
 
 
-def make_request(self, orderid: int,) -> None:
+def make_request(self: BaseApi, orderid: int,) -> None:
     """Delete purchase order by ID"""
     m = ApiRequest(
         method="DELETE",
@@ -21,4 +22,4 @@ def make_request(self, orderid: int,) -> None:
         query_params=self._only_provided({}),
         cookies=self._only_provided({}),
     )
-    return self.make_request({}, m)
+    return self.make_request({"400": {"default": None,}, "404": {"default": None,},}, m)

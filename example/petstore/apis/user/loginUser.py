@@ -7,10 +7,11 @@ import typing
 
 from pydantic import BaseModel
 
+from swagger_codegen.api.base import BaseApi
 from swagger_codegen.api.request import ApiRequest
 
 
-def make_request(self, username: str = ..., password: str = ...,) -> str:
+def make_request(self: BaseApi, username: str = ..., password: str = ...,) -> str:
     """Logs user into the system"""
     m = ApiRequest(
         method="GET",
@@ -22,5 +23,9 @@ def make_request(self, username: str = ..., password: str = ...,) -> str:
         cookies=self._only_provided({}),
     )
     return self.make_request(
-        {"200": {"application/json": str, "application/xml": str,},}, m
+        {
+            "200": {"application/json": str, "application/xml": str,},
+            "400": {"default": None,},
+        },
+        m,
     )

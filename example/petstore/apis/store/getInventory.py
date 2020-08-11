@@ -7,10 +7,11 @@ import typing
 
 from pydantic import BaseModel
 
+from swagger_codegen.api.base import BaseApi
 from swagger_codegen.api.request import ApiRequest
 
 
-def make_request(self,) -> typing.Dict[str, int]:
+def make_request(self: BaseApi,) -> typing.Dict[str, int]:
     """Returns pet inventories by status"""
     m = ApiRequest(
         method="GET",

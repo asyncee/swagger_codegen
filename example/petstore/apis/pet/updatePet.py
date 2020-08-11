@@ -7,6 +7,7 @@ import typing
 
 from pydantic import BaseModel
 
+from swagger_codegen.api.base import BaseApi
 from swagger_codegen.api.request import ApiRequest
 
 
@@ -29,7 +30,7 @@ class Pet(BaseModel):
     tags: typing.Optional[typing.List[Tag]] = None
 
 
-def make_request(self, __request__: Pet,) -> Pet:
+def make_request(self: BaseApi, __request__: Pet,) -> Pet:
     """Update an existing pet"""
     m = ApiRequest(
         method="PUT",
@@ -41,5 +42,11 @@ def make_request(self, __request__: Pet,) -> Pet:
         cookies=self._only_provided({}),
     )
     return self.make_request(
-        {"200": {"application/json": Pet, "application/xml": Pet,},}, m
+        {
+            "200": {"application/json": Pet, "application/xml": Pet,},
+            "400": {"default": None,},
+            "404": {"default": None,},
+            "405": {"default": None,},
+        },
+        m,
     )

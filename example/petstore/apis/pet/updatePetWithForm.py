@@ -7,10 +7,13 @@ import typing
 
 from pydantic import BaseModel
 
+from swagger_codegen.api.base import BaseApi
 from swagger_codegen.api.request import ApiRequest
 
 
-def make_request(self, petid: int, name: str = ..., status: str = ...,) -> None:
+def make_request(
+    self: BaseApi, petid: int, name: str = ..., status: str = ...,
+) -> None:
     """Updates a pet in the store with form data"""
     m = ApiRequest(
         method="POST",
@@ -21,4 +24,4 @@ def make_request(self, petid: int, name: str = ..., status: str = ...,) -> None:
         query_params=self._only_provided({"name": name, "status": status,}),
         cookies=self._only_provided({}),
     )
-    return self.make_request({}, m)
+    return self.make_request({"405": {"default": None,},}, m)

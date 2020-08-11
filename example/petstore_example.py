@@ -7,15 +7,13 @@ from example.petstore.apis.pet.addPet import Pet
 from example.petstore.apis.user.createUser import User
 from swagger_codegen.api.adapter.requests import RequestsAdapter
 from swagger_codegen.api.configuration import Configuration
+
 from .petstore.client import new_client
 
 if __name__ == "__main__":
     client = new_client(
         adapter=RequestsAdapter(debug=False),
-        configuration=Configuration(
-            host="http://petstore.swagger.io:8080",
-            headers={"Accept": "application/json"},
-        ),
+        configuration=Configuration(host="https://petstore3.swagger.io",),
     )
     user = client.user.createUser(User(id=1, username="Test user"))
     assert user.id == 1
