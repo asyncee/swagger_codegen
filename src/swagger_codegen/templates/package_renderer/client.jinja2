@@ -1,7 +1,7 @@
 from dataclasses import dataclass
-from swagger_codegen.api.client import ApiClient
-from swagger_codegen.api.configuration import Configuration
-from swagger_codegen.api.adapter.base import HttpClientAdapter
+from {{ package_api_lib_module_name }}.client import ApiClient
+from {{ package_api_lib_module_name }}.configuration import Configuration
+from {{ package_api_lib_module_name }}.adapter.base import HttpClientAdapter
 
 {% for api in apis %}
 from .apis.{{ api.name }}.api import {{ api.type_name }}

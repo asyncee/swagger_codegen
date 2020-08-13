@@ -23,6 +23,7 @@ class PackageRenderer(Renderer):
         endpoint_dto_template="package_renderer/dto.jinja2",
         client_template="package_renderer/client.jinja2",
         endpoint_imports_template="package_renderer/endpoint_imports.jinja2",
+        package_entrypoint_template="package_renderer/package_entrypoint.jinja2",
     ):
         self._directory = Path(directory).resolve()
 
@@ -38,11 +39,21 @@ class PackageRenderer(Renderer):
         self._package_name = package
         self._project_dir = self._directory / self._package_name
         self._package_dir = self._project_dir
+
+        # name of a subpackage inside a generated client that provides a lower-level HTTP API implementation
+        self._package_api_lib_name = "api"
+        self._package_api_lib_module_name = f"swagger_codegen.{self._package_api_lib_name}"
+
         self._api_template = api_template
         self._endpoint_template = endpoint_template
         self._endpoint_dto_template = endpoint_dto_template
         self._client_template = client_template
         self._endpoint_imports_template = endpoint_imports_template
+        self._package_entrypoint_template = package_entrypoint_template
+
+    @property
+    def _package_api_lib_dir(self) -> Path:
+        return self._package_dir / self._package_api_lib_name
 
     def render(self, endpoints: List[EndpointDescription]):
         if self._package_dir.exists():
@@ -55,6 +66,7 @@ class PackageRenderer(Renderer):
             self._render_api(api)
 
         self._render_client(apis)
+        self._render_low_level_lib('swagger_codegen')
 
     def _get_apis(self, endpoints: List[EndpointDescription]) -> List[Api]:
         endpoints_by_tags = defaultdict(list)
@@ -74,12 +86,19 @@ class PackageRenderer(Renderer):
 
     def _render_client(self, apis: List[Api]):
         (self._package_dir / "__init__.py").write_text(
-            """from swagger_codegen.api.configuration import Configuration
-from .client import new_client
-"""
+            self._render(
+                self._package_entrypoint_template,
+                {"package_api_lib_module_name": self._package_api_lib_module_name}
+            )
         )
 
-        content = self._render(self._client_template, {"apis": apis})
+        content = self._render(
+            self._client_template,
+            {
+                "apis": apis,
+                "package_api_lib_module_name": self._package_api_lib_module_name,
+            }
+        )
         (self._package_dir / "client.py").write_text(content)
 
     def _render_api(self, api: Api):
@@ -87,14 +106,23 @@ from .client import new_client
         api_dir.mkdir(parents=True, exist_ok=True)
         (api_dir / "__init__.py").touch()
 
-        api_py_content = self._render(self._api_template, {"api": api})
+        api_py_content = self._render(
+            self._api_template,
+            {
+                "api": api,
+                "package_api_lib_module_name": self._package_api_lib_module_name,
+            }
+        )
         (api_dir / "api.py").write_text(api_py_content)
 
         for endpoint in api.endpoints:
             self._render_endpoint(api_dir, endpoint)
 
     def _render_endpoint(self, api_dir: str, endpoint: EndpointDescription):
-        imports_block = render_template(self._endpoint_imports_template, {})
+        imports_block = render_template(
+            self._endpoint_imports_template,
+            {"package_api_lib_module_name": self._package_api_lib_module_name}
+        )
         data_types_block = []
         data_types_to_render: List[DataType] = []
 
@@ -121,3 +149,8 @@ from .client import new_client
         endpoint_content = self._post_process(endpoint_content)
 
         (api_dir / endpoint.name).with_suffix(".py").write_text(endpoint_content)
+
+    def _render_low_level_lib(self, codegen_distribution: str) -> None:
+        """ do nothing to preserve backward compatibility
+        """
+        return

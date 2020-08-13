@@ -1,0 +1,4 @@
+from {{ package_api_lib_module_name }}.configuration import Configuration
+from .client import new_client
+
+__all__ = ('new_client', 'Configuration')
