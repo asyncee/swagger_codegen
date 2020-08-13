@@ -1,4 +1,5 @@
 import shutil
+import string
 from collections import defaultdict
 from pathlib import Path
 from typing import List, Set
@@ -67,10 +68,15 @@ class PackageRenderer(Renderer):
 
         for tag, endpoints in endpoints_by_tags.items():
             name = underscore(tag)
-            typename = camelize(tag) + "Api"
+            typename = self._normalize_tag(tag) + "Api"
             apis.append(Api(name=name, type_name=typename, endpoints=endpoints))
 
         return apis
+
+    def _normalize_tag(self, tag: str) -> str:
+        """Tags are used as identifiers so any invalid symbols must be removed."""
+        allowed_symbols = string.ascii_letters + string.digits + "_"
+        return "".join([c for c in underscore(tag) if c in allowed_symbols])
 
     def _render_client(self, apis: List[Api]):
         (self._package_dir / "__init__.py").write_text(
