@@ -1,17 +1,16 @@
 import shutil
-import string
 from collections import defaultdict
 from pathlib import Path
-from typing import List, Set
-
-from inflection import camelize, underscore
+from typing import List
+from typing import Set
 
 from swagger_codegen.parsing.data_type import DataType
 from swagger_codegen.parsing.endpoint import EndpointDescription
-
 from ..api import Api
 from ..renderer import Renderer
 from ..templates import render_template
+from ..utils import to_classname
+from ..utils import to_identifier
 
 
 class PackageRenderer(Renderer):
@@ -67,16 +66,11 @@ class PackageRenderer(Renderer):
         apis = []
 
         for tag, endpoints in endpoints_by_tags.items():
-            name = underscore(tag)
-            typename = camelize(self._normalize_tag(tag)) + "Api"
+            name = to_identifier(tag)
+            typename = to_classname(tag) + "Api"
             apis.append(Api(name=name, type_name=typename, endpoints=endpoints))
 
         return apis
-
-    def _normalize_tag(self, tag: str) -> str:
-        """Tags are used as identifiers so any invalid symbols must be removed."""
-        allowed_symbols = string.ascii_letters + string.digits + "_"
-        return "".join([c for c in underscore(tag) if c in allowed_symbols])
 
     def _render_client(self, apis: List[Api]):
         (self._package_dir / "__init__.py").write_text(
