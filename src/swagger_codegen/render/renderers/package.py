@@ -68,7 +68,7 @@ class PackageRenderer(Renderer):
 
         for tag, endpoints in endpoints_by_tags.items():
             name = underscore(tag)
-            typename = self._normalize_tag(tag) + "Api"
+            typename = camelize(self._normalize_tag(tag)) + "Api"
             apis.append(Api(name=name, type_name=typename, endpoints=endpoints))
 
         return apis
