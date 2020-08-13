@@ -8,7 +8,7 @@ allowed_chars = string.ascii_letters + string.digits + "_"
 
 def start_with_valid_characters(name: str) -> str:
     return "".join(
-        [c for c in dropwhile(lambda s: s not in string.ascii_letters + "_", name)]
+        c for c in dropwhile(lambda s: s not in string.ascii_letters + "_", name)
     )
 
 
@@ -17,7 +17,7 @@ def replace_chars(name: str) -> str:
 
 
 def strip_chars(name: str) -> str:
-    return "".join([c for c in name if c in allowed_chars])
+    return "".join(c for c in name if c in allowed_chars)
 
 
 def to_classname(name: str) -> str:
