@@ -5,3 +5,4 @@ bootstrap:
 
 test:
 	pytest -s --ff tests
+	pytest src
