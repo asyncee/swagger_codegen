@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from swagger_codegen.api.base import BaseApi
+from {{ package_api_lib_module_name }}.base import BaseApi
 
 {% for endpoint in api.endpoints -%}
 from . import {{ endpoint.name }}

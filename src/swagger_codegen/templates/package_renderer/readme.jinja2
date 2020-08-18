@@ -1,0 +1,28 @@
+# {{ package_name }}
+
+The client is provided with async and sync adapters.
+
+To install the async version with all its dependencies use:
+```bash
+pip install {{ package_name }}[asyncio]
+```
+
+To install the sync version with all its dependencies use:
+```bash
+pip install {{ package_name }}[sync]
+```
+
+To install both versions with all their dependencies use:
+```bash
+pip install {{ package_name }}[asyncio,sync]
+```
+
+## Client instantiation example
+
+```python
+
+from {{ package_name }} import new_client, Configuration
+from {{ package_api_lib_module_name }}.adapter.requests import RequestsAdapter
+
+client = new_client(RequestsAdapter(), Configuration(host="<your openapi server URL>"))
+```

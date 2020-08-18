@@ -29,6 +29,10 @@ setup(name='{{ package_name }}',
       zip_safe=False,
       test_suite='tests',
       tests_require=['pytest', 'coverage', 'wheel'],
-      install_requires=['pydantic', 'swagger_codegen'],
+      install_requires=['pydantic', 'multidict', 'schemathesis'],
+      extras_require={
+          'asyncio': ['aiohttp'],
+          'sync': ['requests'],
+      },
       entry_points={}
     )
