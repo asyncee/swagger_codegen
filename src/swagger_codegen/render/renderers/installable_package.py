@@ -3,6 +3,7 @@ from pathlib import Path
 from pkg_resources import get_distribution
 from typing import List
 
+from inflection import underscore
 from swagger_codegen.parsing.endpoint import EndpointDescription
 
 from .package import PackageRenderer
@@ -20,11 +21,12 @@ class InstallablePackageRenderer(PackageRenderer):
         super(InstallablePackageRenderer, self).__init__(*args, **kwargs)
 
         self._project_dir = self._directory / self._package_name
+        self._valid_python_package_name = underscore(self._package_name)
         # second level of nesting is necessary to separate `setup.py` and meta-files (readme, tests etc)
         # from the package files (runtime modules)
-        self._package_dir = self._project_dir / self._package_name
+        self._package_dir = self._project_dir / self._valid_python_package_name
         self._package_api_lib_name = "lib"
-        self._package_api_lib_module_name = f"{self._package_name}.{self._package_api_lib_name}"
+        self._package_api_lib_module_name = f"{self._valid_python_package_name}.{self._package_api_lib_name}"
 
         self._setup_py_template = setup_py_template
         self._manifest_in_template = manifest_in_template
@@ -41,13 +43,15 @@ class InstallablePackageRenderer(PackageRenderer):
             self._render(
                 self._readme_template,
                 {
-                    "package_name": self._package_name,
+                    "package_name": self._valid_python_package_name,
+                    "pypi_name": self._package_name,
                     "package_api_lib_module_name": self._package_api_lib_module_name,
                 }
             )
         )
         ctx = {
-            "package_name": self._package_name,
+            "package_name": self._valid_python_package_name,
+            "pypi_name": self._package_name,
             "package_version": "1.0.0",
             "package_description": self._package_name,
         }
