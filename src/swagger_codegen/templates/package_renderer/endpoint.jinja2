@@ -7,6 +7,21 @@ def make_request(self: BaseApi,
 {% endfor %}
 ) -> {{ endpoint.return_type }}:
     {% if endpoint.docstring %}"""{{ endpoint.docstring }}"""{% endif %}
+
+    def serialize_item(item):
+        if isinstance(item, pydantic.BaseModel):
+            return item.dict()
+        return item
+
+    {% if endpoint.body_request %}
+    if isinstance({{ endpoint.body_request.name }}, (list, tuple, set)):
+        body = [serialize_item(item) for item in {{ endpoint.body_request.name }}]
+    else:
+        body = {{ endpoint.body_request.name }}.dict()
+    {% else %}
+    body = None
+    {% endif %}
+
     m = ApiRequest(
         method="{{ endpoint.method }}",
         path="{{ endpoint.path }}".format(
@@ -15,7 +30,7 @@ def make_request(self: BaseApi,
             {% endfor %}
         ),
         content_type={% if endpoint.body_request %}"{{ endpoint.body_request.content_type }}"{% else %}None{% endif %},
-        body={% if endpoint.body_request %}{{ endpoint.body_request.name }}.dict(){% else %}None{% endif %},
+        body=body,
         headers=self._only_provided({
         {%- for header in endpoint.to_arguments(endpoint.endpoint.headers)  %}
             "{{ header['name'] }}": {{ endpoint.make_variable_name(header['name']) }},
