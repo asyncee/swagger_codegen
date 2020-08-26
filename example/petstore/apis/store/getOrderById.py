@@ -22,11 +22,19 @@ class Order(BaseModel):
 
 def make_request(self: BaseApi, orderid: int,) -> Order:
     """Find purchase order by ID"""
+
+    def serialize_item(item):
+        if isinstance(item, pydantic.BaseModel):
+            return item.dict()
+        return item
+
+    body = None
+
     m = ApiRequest(
         method="GET",
         path="/api/v3/store/order/{orderId}".format(orderId=orderid,),
         content_type=None,
-        body=None,
+        body=body,
         headers=self._only_provided({}),
         query_params=self._only_provided({}),
         cookies=self._only_provided({}),

@@ -24,11 +24,22 @@ class User(BaseModel):
 
 def make_request(self: BaseApi, __request__: User,) -> None:
     """Create user"""
+
+    def serialize_item(item):
+        if isinstance(item, pydantic.BaseModel):
+            return item.dict()
+        return item
+
+    if isinstance(__request__, (list, tuple, set)):
+        body = [serialize_item(item) for item in __request__]
+    else:
+        body = __request__.dict()
+
     m = ApiRequest(
         method="POST",
         path="/api/v3/user".format(),
         content_type="application/json",
-        body=__request__.dict(),
+        body=body,
         headers=self._only_provided({}),
         query_params=self._only_provided({}),
         cookies=self._only_provided({}),
