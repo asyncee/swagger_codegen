@@ -1,7 +1,6 @@
 import pytest
 
-from swagger_codegen.parsing.data_type import DataType
-from swagger_codegen.parsing.data_type import ObjectDataType
+from swagger_codegen.parsing.data_type import DataType, ObjectDataType
 from swagger_codegen.parsing.data_type_parser import make_data_type
 
 
@@ -47,6 +46,9 @@ def test_parse_all_of_any_of_one_of():
 def test_parse_enum():
     data_type = make_data_type({"enum": ["one", "two"]})
     assert data_type == DataType(python_type="str")
+
+    data_type = make_data_type({"title": "PriceType", "enum": [1], "type": "integer"})
+    assert data_type == DataType(python_type="int")
 
 
 def test_parse_missing_schema():

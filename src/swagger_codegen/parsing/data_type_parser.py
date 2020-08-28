@@ -1,12 +1,9 @@
-from typing import Dict
-from typing import List
-from typing import Optional
+from typing import Dict, List, Optional
 
 from pydantic import BaseModel
 from pydantic.utils import validate_field_name
 
-from .data_type import DataType
-from .data_type import ObjectDataType
+from .data_type import DataType, ObjectDataType
 
 
 def make_data_type(schema: dict, parent_types: Optional[List[str]] = None,) -> DataType:
@@ -27,12 +24,6 @@ def make_data_type(schema: dict, parent_types: Optional[List[str]] = None,) -> D
                 )
 
             types = [r.python_type for r in members]
-            # if len(members) == 2 and "None" in types:
-            #     a, b = members
-            #     non_null_member = a if b.python_type == "None" else b
-            #     return DataType(
-            #         python_type=non_null_member.python_type, members=[non_null_member]
-            #     )
 
             nested_types = ", ".join(types)
             return DataType(
@@ -40,6 +31,9 @@ def make_data_type(schema: dict, parent_types: Optional[List[str]] = None,) -> D
             )
 
     if "enum" in schema:
+        if "type" in schema:
+            del schema["enum"]
+            return make_data_type(schema)
         return DataType(python_type="str")
 
     if "type" not in schema:
