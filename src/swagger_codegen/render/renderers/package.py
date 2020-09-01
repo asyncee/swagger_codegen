@@ -104,6 +104,7 @@ class PackageRenderer(Renderer):
     def _render_api(self, api: Api):
         api_dir = self._package_dir / "apis" / api.name
         api_dir.mkdir(parents=True, exist_ok=True)
+        (api_dir.parent / "__init__.py").touch()
         (api_dir / "__init__.py").touch()
 
         api_py_content = self._render(
