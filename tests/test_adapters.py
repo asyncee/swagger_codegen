@@ -3,11 +3,13 @@ import os
 from typing import Callable
 from urllib.parse import urljoin
 
-import aiohttp
 import pytest
 
+import aiohttp
+import httpx
 from swagger_codegen.api.adapter.aiohttp import AiohttpAdapter
 from swagger_codegen.api.adapter.base import HttpClientAdapter
+from swagger_codegen.api.adapter.httpx import HttpxAdapter
 from swagger_codegen.api.adapter.requests import RequestsAdapter
 from swagger_codegen.api.request import ApiRequest
 from swagger_codegen.api.response import ApiResponse
@@ -20,7 +22,7 @@ def requests_adapter():
 
 @pytest.yield_fixture
 def aiohttp_adapter():
-    class SyncAdapterWrapper(HttpClientAdapter):
+    class AiohttpSyncAdapter(HttpClientAdapter):
         def call(self, api_request: ApiRequest) -> ApiResponse:
             async def _request():
                 async with aiohttp.ClientSession() as session:
@@ -29,13 +31,28 @@ def aiohttp_adapter():
             loop = asyncio.get_event_loop()
             return loop.run_until_complete(loop.create_task(_request()))
 
-    return SyncAdapterWrapper()
+    return AiohttpSyncAdapter()
+
+
+@pytest.yield_fixture
+def httpx_adapter():
+    class HttpxSyncAdapter(HttpClientAdapter):
+        def call(self, api_request: ApiRequest) -> ApiResponse:
+            async def _request():
+                async with httpx.AsyncClient() as client:
+                    return await HttpxAdapter(client).call(api_request)
+
+            loop = asyncio.get_event_loop()
+            return loop.run_until_complete(loop.create_task(_request()))
+
+    return HttpxSyncAdapter()
 
 
 @pytest.fixture(
     params=[
         pytest.lazy_fixture("requests_adapter"),
         pytest.lazy_fixture("aiohttp_adapter"),
+        pytest.lazy_fixture("httpx_adapter"),
     ]
 )
 def adapter(request):

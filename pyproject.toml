@@ -24,6 +24,7 @@ schemathesis = "1.1.0"
 
 aiohttp = { version = "*", optional = true }
 requests = { version = "*", optional = true }
+httpx = { version = "*", optional = true }
 black = { version = "*", allow-prereleases = true, optional = true }
 
 [tool.poetry.dev-dependencies]
@@ -36,9 +37,9 @@ mypy-extensions = "^0.4.3"
 
 [tool.poetry.extras]
 sync = ["requests"]
-async = ["aiohttp"]
+async = ["aiohttp", "httpx"]
 black = ["black"]
-all = ["aiohttp", "requests", "black"]
+all = ["aiohttp", "requests", "httpx", "black"]
 
 [tool.poetry.scripts]
 swagger_codegen = 'swagger_codegen.cli.main:app'
