@@ -13,6 +13,6 @@ package = "my_api_1"
 
 # Load api definition from url.
 [services.petstore]
-uri = "http://petstore.swagger.io:8080/api/v3/openapi.json"
+uri = "https://petstore3.swagger.io/api/v3/openapi.json"
 directory = "example"
 package = "petstore"

@@ -10,7 +10,7 @@ pip install swagger-codegen
 
 ```
 # Generate Petstore Api client using 'petstore' package name.
-swagger_codegen generate http://petstore.swagger.io:8080/api/v3/openapi.json petstore
+swagger_codegen generate https://petstore3.swagger.io/api/v3/openapi.json petstore
 
 python
 
