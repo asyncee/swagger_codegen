@@ -6,6 +6,10 @@
 pip install swagger-codegen
 ```
 
+### Swagger version
+
+Currently only OpenApi 3.x (aka Swagger 3) is supported. 
+
 ### Usage example
 
 ```
