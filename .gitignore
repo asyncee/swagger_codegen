@@ -1,4 +1,5 @@
 *.json
+!tests/*.json
 .idea
 env
 *.egg-info

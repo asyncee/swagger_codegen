@@ -1,0 +1,59 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Swagger Petstore",
+    "description": "This is a sample server Petstore server.  You can find out more about     Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).      For this sample, you can use the api key `special-key` to test the authorization     filters.",
+    "version": "1.0.0"
+  },
+   "components": {
+     "schemas": {
+       "ResponseA": {
+         "type": "object",
+         "properties": {
+           "field": {
+             "type": "string",
+             "description": "a string"
+           }
+         }
+       },
+       "ResponseB": {
+         "type": "object",
+         "properties": {
+           "field": {
+             "type": "string",
+             "description": "a string"
+           }
+         }
+       }
+     }
+   },
+  "paths": {
+    "/multiple-status-codes": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "Response A",
+            "content": {
+               "application/json": {
+                 "schema": {
+                   "$ref": "#/components/schemas/ResponseA"
+                 }
+               }
+            }
+          },
+          "400": {"description": "default"},
+          "422": {
+            "description": "Response B",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseB"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
