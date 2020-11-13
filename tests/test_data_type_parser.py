@@ -1,5 +1,4 @@
 import pytest
-
 from swagger_codegen.parsing.data_type import DataType, ObjectDataType
 from swagger_codegen.parsing.data_type_parser import make_data_type
 
@@ -37,7 +36,12 @@ def test_parse_all_of_any_of_one_of():
             members=[
                 ObjectDataType(
                     python_type=None,
-                    members=[DataType(python_type="str", member_name="name",)],
+                    members=[
+                        DataType(
+                            python_type="str",
+                            member_name="name",
+                        )
+                    ],
                 )
             ],
         )
@@ -177,7 +181,11 @@ def test_parse_object_with_required_and_or_default():
     assert r == ObjectDataType(
         python_type="Obj",
         members=[
-            DataType(python_type="str", member_name="a", member_value="'a'",),
+            DataType(
+                python_type="str",
+                member_name="a",
+                member_value="'a'",
+            ),
             DataType(python_type="str", member_name="b", member_value="'b'"),
             DataType(python_type="str", member_name="c"),
             DataType(
@@ -216,7 +224,9 @@ def test_parse_object_with_recursive_reference():
         python_type="Obj1",
         members=[
             ObjectDataType(
-                python_type="Obj1", member_name="recursive", is_recursive=True,
+                python_type="Obj1",
+                member_name="recursive",
+                is_recursive=True,
             ),
         ],
     )
@@ -225,3 +235,50 @@ def test_parse_object_with_recursive_reference():
 def test_parse_raises_if_schema_is_invalid():
     with pytest.raises(ValueError):
         make_data_type({"something": True, "type": "invalid"})
+
+
+def test_parse_nested_object():
+    data_type = make_data_type(
+        {
+            "x-name": "top_level_model",
+            "type": "object",
+            "properties": {
+                "string_property": {"type": "string"},
+                "nested_property": {
+                    "type": "object",
+                    "properties": {
+                        "number_property": {
+                            "type": "number",
+                        },
+                    },
+                },
+            },
+        },
+    )
+    assert data_type == ObjectDataType(
+        python_type="top_level_model",
+        members=[
+            DataType(
+                python_type="str",
+                member_name="string_property",
+                member_value="None",
+                is_optional_type=True,
+                is_recursive=False,
+            ),
+            ObjectDataType(
+                python_type="top_level_modelNested_property",
+                member_name="nested_property",
+                member_value="None",
+                is_optional_type=True,
+                is_recursive=False,
+                members=[
+                    DataType(
+                        python_type="float",
+                        member_name="number_property",
+                        is_optional_type=True,
+                        member_value="None",
+                    )
+                ],
+            ),
+        ],
+    )

@@ -6,7 +6,11 @@ from pydantic.utils import validate_field_name
 from .data_type import DataType, ObjectDataType
 
 
-def make_data_type(schema: dict, parent_types: Optional[List[str]] = None,) -> DataType:
+def make_data_type(
+    schema: dict,
+    parent_types: Optional[List[str]] = None,
+    parent_schema: Optional[dict] = None,
+) -> DataType:
     parent_types = parent_types or []
     c_parent_types = parent_types.copy()
 
@@ -17,7 +21,10 @@ def make_data_type(schema: dict, parent_types: Optional[List[str]] = None,) -> D
     for field in ("allOf", "anyOf", "oneOf"):
         if field in schema:
             nested_schemas = schema[field]
-            members = [make_data_type(n, c_parent_types) for n in nested_schemas]
+            members = [
+                make_data_type(n, c_parent_types, parent_schema=schema)
+                for n in nested_schemas
+            ]
             if len(members) == 1:
                 return DataType(
                     python_type=f"{members[0].python_type}", members=members
@@ -65,7 +72,9 @@ def make_data_type(schema: dict, parent_types: Optional[List[str]] = None,) -> D
             return DataType(python_type="typing.Dict")
 
         if "additionalProperties" in schema:
-            inner_type = make_data_type(schema["additionalProperties"], c_parent_types)
+            inner_type = make_data_type(
+                schema["additionalProperties"], c_parent_types, parent_schema=schema
+            )
             return DataType(
                 python_type=f"typing.Dict[str, {inner_type.python_type}]",
                 members=[inner_type],
@@ -73,6 +82,20 @@ def make_data_type(schema: dict, parent_types: Optional[List[str]] = None,) -> D
 
         if "properties" in schema:
             pt_name = object_name(schema)
+
+            # Case when parent has a field that is an object that does not have a name.
+            # In that situation such field must be rendered as a separate python model (class)
+            # with name of <parent_type_name><field_name>
+            if pt_name is None and parent_schema and "properties" in parent_schema:
+                parent_props = parent_schema["properties"].items()
+                for parent_property_name, parent_property_schema in parent_props:
+                    if parent_property_schema is schema:
+                        parent_name_part = "_".join(
+                            [p for p in parent_types if p is not None]
+                        )
+                        pt_name = f"{parent_name_part}{parent_property_name[0].upper()}{parent_property_name[1:]}"
+                        break
+
             if pt_name in parent_types:
                 return ObjectDataType(python_type=pt_name, is_recursive=True)
 
@@ -108,7 +131,9 @@ def make_data_type(schema: dict, parent_types: Optional[List[str]] = None,) -> D
                 )
 
             for propname, propschema in schema["properties"].items():
-                child_data_type = make_data_type(propschema, c_parent_types)
+                child_data_type = make_data_type(
+                    propschema, c_parent_types, parent_schema=schema
+                )
 
                 name, type, value = member_name_type_value(
                     propname,
@@ -131,7 +156,9 @@ def make_data_type(schema: dict, parent_types: Optional[List[str]] = None,) -> D
         if schema["items"] == {}:
             return DataType(python_type="typing.List")
 
-        inner_type = make_data_type(schema["items"], c_parent_types)
+        inner_type = make_data_type(
+            schema["items"], c_parent_types, parent_schema=schema
+        )
         return DataType(
             python_type=f"typing.List[{inner_type.python_type}]", members=[inner_type]
         )
