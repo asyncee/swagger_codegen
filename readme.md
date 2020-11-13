@@ -70,5 +70,4 @@ Also `example` directory may be out of sync with actual generated code.
 
 ### Contributors
 
-- livestalker
-- coderfromhere
+You can see all people who helped this project [at the contributors page](https://github.com/asyncee/swagger_codegen/graphs/contributors)
