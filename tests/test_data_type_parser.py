@@ -102,6 +102,13 @@ def test_parse_object():
     )
 
 
+def test_parse_additional_properties():
+    false_properties = make_data_type({"type": "object", "additionalProperties": False})
+    true_properties = make_data_type({"type": "object", "additionalProperties": True})
+    assert false_properties == DataType(python_type="typing.Dict")
+    assert true_properties == DataType(python_type="typing.Dict")
+
+
 def test_parse_complex_object():
     assert make_data_type(
         {

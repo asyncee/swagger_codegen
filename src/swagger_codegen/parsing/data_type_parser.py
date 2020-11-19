@@ -72,6 +72,12 @@ def make_data_type(
             return DataType(python_type="typing.Dict")
 
         if "additionalProperties" in schema:
+            if (
+                isinstance(schema["additionalProperties"], bool)
+                or not schema["additionalProperties"]
+            ):
+                return DataType(python_type="typing.Dict")
+
             inner_type = make_data_type(
                 schema["additionalProperties"], c_parent_types, parent_schema=schema
             )
