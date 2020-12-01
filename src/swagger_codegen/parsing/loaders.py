@@ -41,9 +41,43 @@ def load_base_schema(schema_uri) -> BaseSchema:
     else:
         schema = from_file(schema_uri)
     add_x_names(schema)
+    add_x_names_to_plain_response_objects(schema)
     return loaders.from_dict(schema)
 
 
 def add_x_names(schema):
+    """
+    Add `x-name` attribute to each schema referenced as $ref.
+
+    This step is needed to provide a name that will be used to render
+    request or response data transfer objects for api client's methods.
+    """
     for name, schema in schema["components"]["schemas"].items():
         schema["x-name"] = name
+
+
+def add_x_names_to_plain_response_objects(schema):
+    """Add `x-name` attribute to each inlined response object.
+
+    Inlined response object is an object that is defined in `responses`
+    section with schema of type `object` instead of `$ref`.
+
+    That is needed to provide a name that will
+    be used to render response data transfer object for respective endpoint.
+    """
+    if "paths" not in schema:
+        return
+
+    for uri, path in schema["paths"].items():
+        for method_name, method in path.items():
+            for status_code, description in method["responses"].items():
+                if "content" not in description:
+                    continue
+                if "application/json" not in description["content"]:
+                    continue
+                schema = description["content"]["application/json"]["schema"]
+                if "type" not in schema:
+                    continue
+                if schema["type"] != "object":
+                    continue
+                schema["x-name"] = f"Response{status_code}"
