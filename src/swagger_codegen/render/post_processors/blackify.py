@@ -14,9 +14,11 @@ class Blackify(PostProcessor):
 
         try:
             return black.format_file_contents(
-                content, fast=False, mode=black.FileMode(),
+                content,
+                fast=False,
+                mode=black.FileMode(),
             )
-        except black.InvalidInput as e:
+        except (black.InvalidInput, AssertionError) as e:
             logger.warning(
                 f"Black failed to post-process file with an error: {e}. "
                 f"Currently it happens on non python files, "
