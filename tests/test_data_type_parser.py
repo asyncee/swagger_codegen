@@ -1,4 +1,5 @@
 import pytest
+
 from swagger_codegen.parsing.data_type import DataType, ObjectDataType
 from swagger_codegen.parsing.data_type_parser import make_data_type
 
@@ -128,6 +129,27 @@ def test_parse_complex_object():
                 member_value="None",
                 is_optional_type=True,
             ),
+            DataType(
+                python_type="str", member_name="field2", member_value="'some-value'"
+            ),
+        ],
+    )
+
+
+def test_parse_complex_object_read_only():
+    assert make_data_type(
+        {
+            "x-name": "Obj1",
+            "type": "object",
+            "properties": {
+                "field1": {"type": "integer", "readOnly": True},
+                "field2": {"type": "string", "default": "some-value"},
+            },
+        },
+        for_writes=True,
+    ) == ObjectDataType(
+        python_type="Obj1",
+        members=[
             DataType(
                 python_type="str", member_name="field2", member_value="'some-value'"
             ),
