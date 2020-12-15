@@ -93,7 +93,9 @@ def make_data_type(
             )
 
         if "properties" in schema:
-            pt_name = object_name(schema)
+            if pt_name := object_name(schema):
+                if for_writes:
+                    pt_name += 'Request'
 
             # Case when parent has a field that is an object that does not have a name.
             # In that situation such field must be rendered as a separate python model (class)

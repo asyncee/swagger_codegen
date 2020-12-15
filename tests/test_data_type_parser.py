@@ -148,7 +148,7 @@ def test_parse_complex_object_read_only():
         },
         for_writes=True,
     ) == ObjectDataType(
-        python_type="Obj1",
+        python_type="Obj1Request",
         members=[
             DataType(
                 python_type="str", member_name="field2", member_value="'some-value'"
