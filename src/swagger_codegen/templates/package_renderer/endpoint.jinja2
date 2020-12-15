@@ -15,9 +15,9 @@ def make_request(self: BaseApi,
 
     {% if endpoint.body_request %}
     if isinstance({{ endpoint.body_request.name }}, (list, tuple, set)):
-        body = [serialize_item(item) for item in {{ endpoint.body_request.name }}]
+        body = json.dumps([serialize_item(item) for item in {{ endpoint.body_request.name }}])
     else:
-        body = {{ endpoint.body_request.name }}.dict()
+        body = {{ endpoint.body_request.name }}.json()
     {% else %}
     body = None
     {% endif %}
