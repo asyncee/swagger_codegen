@@ -42,14 +42,14 @@ class EndpointDescription:
         if self.endpoint.body:
             return EndpointRequest(
                 name=name,
-                data_type=make_data_type(self.endpoint.body),
+                data_type=make_data_type(self.endpoint.body, for_writes=True),
                 definition=self.endpoint.body,
                 content_type="application/json",
             )
         if self.endpoint.form_data:
             return EndpointRequest(
                 name=name,
-                data_type=make_data_type(self.endpoint.form_data),
+                data_type=make_data_type(self.endpoint.form_data, for_writes=True),
                 definition=self.endpoint.form_data,
                 content_type="multipart/form-data",
             )

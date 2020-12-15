@@ -10,6 +10,7 @@ def make_data_type(
     schema: dict,
     parent_types: Optional[List[str]] = None,
     parent_schema: Optional[dict] = None,
+    for_writes: bool = False,
 ) -> DataType:
     parent_types = parent_types or []
     c_parent_types = parent_types.copy()
@@ -22,7 +23,9 @@ def make_data_type(
         if field in schema:
             nested_schemas = schema[field]
             members = [
-                make_data_type(n, c_parent_types, parent_schema=schema)
+                make_data_type(
+                    n, c_parent_types, parent_schema=schema, for_writes=for_writes
+                )
                 for n in nested_schemas
             ]
             if len(members) == 1:
@@ -40,7 +43,7 @@ def make_data_type(
     if "enum" in schema:
         if "type" in schema:
             del schema["enum"]
-            return make_data_type(schema)
+            return make_data_type(schema, for_writes=for_writes)
         return DataType(python_type="str")
 
     if "type" not in schema:
@@ -79,7 +82,10 @@ def make_data_type(
                 return DataType(python_type="typing.Dict")
 
             inner_type = make_data_type(
-                schema["additionalProperties"], c_parent_types, parent_schema=schema
+                schema["additionalProperties"],
+                c_parent_types,
+                parent_schema=schema,
+                for_writes=for_writes,
             )
             return DataType(
                 python_type=f"typing.Dict[str, {inner_type.python_type}]",
@@ -137,8 +143,14 @@ def make_data_type(
                 )
 
             for propname, propschema in schema["properties"].items():
+                if for_writes and propschema.get("readOnly"):
+                    # We don't want to expose read-only properties when we want to write.
+                    continue
                 child_data_type = make_data_type(
-                    propschema, c_parent_types, parent_schema=schema
+                    propschema,
+                    c_parent_types,
+                    parent_schema=schema,
+                    for_writes=for_writes,
                 )
 
                 name, type, value = member_name_type_value(
@@ -163,7 +175,7 @@ def make_data_type(
             return DataType(python_type="typing.List")
 
         inner_type = make_data_type(
-            schema["items"], c_parent_types, parent_schema=schema
+            schema["items"], c_parent_types, parent_schema=schema, for_writes=for_writes
         )
         return DataType(
             python_type=f"typing.List[{inner_type.python_type}]", members=[inner_type]
