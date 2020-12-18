@@ -1,29 +1,35 @@
 from pathlib import Path
+from typing import Optional
 
 from schemathesis import loaders
 from schemathesis.schemas import BaseSchema
 
+DEFAULT_ENCODING = "utf-8"
 
-def _from_json(file: str) -> dict:
+
+def _from_json(file: str, encoding: Optional[str] = None) -> dict:
     import json
 
-    with open(file) as fd:
+    with open(
+        file,
+        encoding=encoding,
+    ) as fd:
         return json.load(fd)
 
 
-def _from_yaml(file: str):
+def _from_yaml(file: str, encoding: Optional[str] = None):
     import yaml
 
-    with open(file) as fd:
-        return yaml.load(fd)
+    with open(file, encoding=encoding) as fd:
+        return yaml.safe_load(fd)
 
 
-def from_file(file: str):
+def from_file(file: str, encoding: Optional[str] = None):
     parsers = {
         ".json": _from_json,
         ".yaml": _from_yaml,
     }
-    return parsers[Path(file).suffix](file)
+    return parsers[Path(file).suffix](file, encoding)
 
 
 def from_uri(uri: str) -> dict:
@@ -35,11 +41,11 @@ def from_uri(uri: str) -> dict:
     return yaml.safe_load(response.text)
 
 
-def load_base_schema(schema_uri) -> BaseSchema:
+def load_base_schema(schema_uri, encoding: Optional[str] = None) -> BaseSchema:
     if "://" in schema_uri:
         schema = from_uri(schema_uri)
     else:
-        schema = from_file(schema_uri)
+        schema = from_file(schema_uri, encoding=encoding or DEFAULT_ENCODING)
     add_x_names(schema)
     add_x_names_to_plain_response_objects(schema)
     return loaders.from_dict(schema)
