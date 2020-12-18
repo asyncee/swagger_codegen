@@ -1,7 +1,6 @@
 from unittest import mock
 
 from pydantic import BaseModel
-
 from swagger_codegen.api.base import BaseApi
 from swagger_codegen.api.client import ApiClient
 from swagger_codegen.api.configuration import Configuration
@@ -22,7 +21,7 @@ class ResponseB(BaseModel):
 
 
 def test_response_mapping_for_multiple_responses():
-    base_schema = load_base_schema("tests/test_openapi.json")
+    base_schema = load_base_schema("tests/fixtures/test_openapi.json")
     endpoints = endpoints_from_base_schema(base_schema, EndpointDescription)
     endpoint = next((e for e in endpoints if e.path == "/multiple-status-codes"), None)
     assert endpoint.response_mapping == {

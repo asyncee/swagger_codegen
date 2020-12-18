@@ -1,5 +1,5 @@
 *.json
-!tests/*.json
+!tests/fixtures/*.json
 .idea
 env
 *.egg-info
