@@ -7,14 +7,14 @@ from schemathesis.schemas import BaseSchema
 def _from_json(file: str) -> dict:
     import json
 
-    with open(file) as fd:
+    with open(file, encoding="UTF-8") as fd:
         return json.load(fd)
 
 
 def _from_yaml(file: str):
     import yaml
 
-    with open(file) as fd:
+    with open(file, encoding="UTF-8") as fd:
         return yaml.load(fd)
 
 
