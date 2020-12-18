@@ -26,6 +26,7 @@ def generate(
     directory: Optional[str] = None,
     renderer: Optional[str] = None,
     endpoint: Optional[str] = None,
+    encoding: Optional[str] = None,
 ):
     directory = directory or "."
     renderer = renderer or qualname(PackageRenderer)
@@ -34,7 +35,7 @@ def generate(
     rich.print(
         f"Generating from [yellow]{uri}[/yellow] to [yellow]{directory} ({package})[/yellow]"
     )
-    base_schema = load_base_schema(uri)
+    base_schema = load_base_schema(uri, encoding)
     rich.print(
         f"Loaded schema [yellow]{base_schema}[/yellow] "
         f"with {base_schema.endpoints_count} endpoint(s)"
