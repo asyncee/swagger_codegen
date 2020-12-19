@@ -25,7 +25,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>> from petstore import new_client, Configuration
 >>> from swagger_codegen.api.adapter.requests import RequestsAdapter
 >>> from petstore.apis.user.createUser import User
->>> client = new_client(RequestsAdapter(), Configuration(host="http://petstore.swagger.io:8080"))
+>>> client = new_client(RequestsAdapter(), Configuration(host="http://petstore3.swagger.io"))
 >>> print(client.user.createUser(User(id=1, username="Swagger-Codegen")))
 id=1 username='Swagger-Codegen' firstName=None lastName=None email=None password=None phone=None userStatus=0
 ```
