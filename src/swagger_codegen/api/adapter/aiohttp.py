@@ -1,14 +1,17 @@
 from functools import partial
 
-import aiohttp
-from aiohttp import ContentTypeError
-
 from swagger_codegen.api.adapter.base import HttpClientAdapter
-from swagger_codegen.api.adapter.params_converter import AiohttpParamsConverter
-from swagger_codegen.api.adapter.params_converter import ParamsConverter
+from swagger_codegen.api.adapter.params_converter import (
+    AiohttpParamsConverter,
+    ParamsConverter,
+)
 from swagger_codegen.api.request import ApiRequest
 from swagger_codegen.api.response import ApiResponse
 from swagger_codegen.api.types import APPLICATION_JSON
+from swagger_codegen.api import json
+
+import aiohttp
+from aiohttp import ContentTypeError
 
 
 class AiohttpAdapter(HttpClientAdapter):
@@ -57,7 +60,8 @@ class AiohttpAdapter(HttpClientAdapter):
             api_request.body is not None
             and api_request.content_type == APPLICATION_JSON
         ):
-            params["json"] = api_request.body
+            params["data"] = json.dumps(api_request.body)
+            params["headers"] = {**params["headers"], "Content-Type": APPLICATION_JSON}
         else:
             params["data"] = api_request.body
 

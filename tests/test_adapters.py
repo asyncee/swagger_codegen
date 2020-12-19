@@ -3,10 +3,11 @@ import os
 from typing import Callable
 from urllib.parse import urljoin
 
-import pytest
-
 import aiohttp
 import httpx
+import pytest
+from pydantic import BaseModel
+from swagger_codegen.api import json
 from swagger_codegen.api.adapter.aiohttp import AiohttpAdapter
 from swagger_codegen.api.adapter.base import HttpClientAdapter
 from swagger_codegen.api.adapter.httpx import HttpxAdapter
@@ -104,7 +105,10 @@ def test_head(url: Callable, adapter: HttpClientAdapter):
 
 def test_get_image(url: Callable, adapter: HttpClientAdapter):
     request_url = url("image/png")
-    request = ApiRequest(method="GET", path=request_url,)
+    request = ApiRequest(
+        method="GET",
+        path=request_url,
+    )
     response = adapter.call(request)
 
     assert isinstance(response, ApiResponse)
@@ -113,9 +117,41 @@ def test_get_image(url: Callable, adapter: HttpClientAdapter):
     assert response.status_code == 200
 
 
-@pytest.mark.skip("not implemented")
 def test_post(url: Callable, adapter: HttpClientAdapter):
-    pass
+    class Payload(BaseModel):
+        field: str
+
+    request_body = {
+        "string": "string",
+        "number": 1,
+        "list": [1, "string", Payload(field="payload")],
+        "bool": True,
+    }
+
+    request_url = url("post")
+    request = ApiRequest(
+        method="POST",
+        path=request_url,
+        query_params={"value": 10},
+        headers={"X-Test-Header": "test"},
+        cookies={"my-cookie": "test"},
+        content_type="application/json",
+        body=request_body,
+    )
+    response = adapter.call(request)
+
+    assert isinstance(response, ApiResponse)
+    assert isinstance(response.body, dict)
+
+    assert response.body["args"] == {"value": "10"}
+    assert response.body["headers"]["X-Test-Header"] == "test"
+    assert response.body["headers"]["Cookie"] == "my-cookie=test"
+
+    assert response.content_type == "application/json"
+    assert response.status_code == 200
+    assert response.url == request_url + "?value=10"
+    assert response.body["data"] == json.dumps(request_body)
+    assert response.body["json"] == request_body
 
 
 @pytest.mark.skip("not implemented")

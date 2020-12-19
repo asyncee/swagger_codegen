@@ -8,16 +8,8 @@ def make_request(self: BaseApi,
 ) -> {{ endpoint.return_type }}:
     {% if endpoint.docstring %}"""{{ endpoint.docstring }}"""{% endif %}
 
-    def serialize_item(item):
-        if isinstance(item, pydantic.BaseModel):
-            return item.dict()
-        return item
-
     {% if endpoint.body_request %}
-    if isinstance({{ endpoint.body_request.name }}, (list, tuple, set)):
-        body = [serialize_item(item) for item in {{ endpoint.body_request.name }}]
-    else:
-        body = {{ endpoint.body_request.name }}.dict()
+    body = {{ endpoint.body_request.name }}
     {% else %}
     body = None
     {% endif %}

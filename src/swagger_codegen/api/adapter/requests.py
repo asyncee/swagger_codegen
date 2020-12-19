@@ -1,13 +1,14 @@
 from functools import partial
 
-import requests
-
+from swagger_codegen.api import json
 from swagger_codegen.api.adapter.base import HttpClientAdapter
-from swagger_codegen.api.adapter.params_converter import DefaultParamsConverter
-from swagger_codegen.api.adapter.params_converter import ParamsConverter
+from swagger_codegen.api.adapter.params_converter import (
+    DefaultParamsConverter, ParamsConverter)
 from swagger_codegen.api.request import ApiRequest
 from swagger_codegen.api.response import ApiResponse
 from swagger_codegen.api.types import APPLICATION_JSON
+
+import requests
 
 
 class RequestsAdapter(HttpClientAdapter):
@@ -48,12 +49,16 @@ class RequestsAdapter(HttpClientAdapter):
     def _write(self, make_request, api_request: ApiRequest):
         params = dict(
             url=api_request.path,
+            params=self._params_converter.convert_query_params(
+                api_request.query_params
+            ),
             headers=api_request.headers,
             cookies=api_request.cookies,
         )
 
         if api_request.content_type == APPLICATION_JSON:
-            params["json"] = api_request.body
+            params["data"] = json.dumps(api_request.body)
+            params["headers"] = {**params["headers"], "Content-Type": APPLICATION_JSON}
         else:
             params["data"] = api_request.body
 
