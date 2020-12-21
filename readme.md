@@ -26,12 +26,13 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>> from swagger_codegen.api.adapter.requests import RequestsAdapter
 >>> from petstore.apis.user.createUser import User
 >>> client = new_client(RequestsAdapter(), Configuration(host="http://petstore3.swagger.io"))
->>> print(client.user.createUser(User(id=1, username="Swagger-Codegen")))
-id=1 username='Swagger-Codegen' firstName=None lastName=None email=None password=None phone=None userStatus=0
+>>> pets = client.pet.findPetsByStatus()
+>>> print(pets)
+[Pet(category=Category(id=1, name='Dogs'), id=69, name='aHldog', photoUrls=['string'], status='available',...]
 ```
 
 You can see [example source code](https://github.com/asyncee/swagger_codegen/tree/master/example)
-for [PetStore](http://petstore.swagger.io:8080/) Api in example directory of a project.
+for [PetStore](http://petstore3.swagger.io:8080/) Api in example directory of a project.
 
 You can test example client with following command:
 
