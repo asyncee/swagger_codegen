@@ -1,23 +1,20 @@
 from __future__ import annotations
 
-import pydantic
 import datetime
-import asyncio
+import pydantic
 import typing
 
 from pydantic import BaseModel
 
 from swagger_codegen.api.base import BaseApi
 from swagger_codegen.api.request import ApiRequest
+from swagger_codegen.api import json
 
 
-def make_request(self: BaseApi,) -> typing.Dict[str, int]:
+def make_request(
+    self: BaseApi,
+) -> typing.Dict[str, int]:
     """Returns pet inventories by status"""
-
-    def serialize_item(item):
-        if isinstance(item, pydantic.BaseModel):
-            return item.dict()
-        return item
 
     body = None
 
@@ -30,4 +27,11 @@ def make_request(self: BaseApi,) -> typing.Dict[str, int]:
         query_params=self._only_provided({}),
         cookies=self._only_provided({}),
     )
-    return self.make_request({"200": {"application/json": typing.Dict[str, int],},}, m)
+    return self.make_request(
+        {
+            "200": {
+                "application/json": typing.Dict[str, int],
+            },
+        },
+        m,
+    )

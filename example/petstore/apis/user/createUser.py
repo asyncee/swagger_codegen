@@ -1,14 +1,14 @@
 from __future__ import annotations
 
-import pydantic
 import datetime
-import asyncio
+import pydantic
 import typing
 
 from pydantic import BaseModel
 
 from swagger_codegen.api.base import BaseApi
 from swagger_codegen.api.request import ApiRequest
+from swagger_codegen.api import json
 
 
 class User(BaseModel):
@@ -22,18 +22,13 @@ class User(BaseModel):
     userStatus: typing.Optional[int] = None
 
 
-def make_request(self: BaseApi, __request__: User,) -> None:
+def make_request(
+    self: BaseApi,
+    __request__: User,
+) -> None:
     """Create user"""
 
-    def serialize_item(item):
-        if isinstance(item, pydantic.BaseModel):
-            return item.dict()
-        return item
-
-    if isinstance(__request__, (list, tuple, set)):
-        body = [serialize_item(item) for item in __request__]
-    else:
-        body = __request__.dict()
+    body = __request__
 
     m = ApiRequest(
         method="POST",
@@ -46,9 +41,16 @@ def make_request(self: BaseApi, __request__: User,) -> None:
     )
     return self.make_request(
         {
-            "content": {"default": None,},
-            "default": {"application/json": User, "application/xml": User,},
-            "description": {"default": None,},
+            "content": {
+                "default": None,
+            },
+            "default": {
+                "application/json": User,
+                "application/xml": User,
+            },
+            "description": {
+                "default": None,
+            },
         },
         m,
     )

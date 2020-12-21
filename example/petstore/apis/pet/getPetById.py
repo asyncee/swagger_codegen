@@ -1,14 +1,14 @@
 from __future__ import annotations
 
-import pydantic
 import datetime
-import asyncio
+import pydantic
 import typing
 
 from pydantic import BaseModel
 
 from swagger_codegen.api.base import BaseApi
 from swagger_codegen.api.request import ApiRequest
+from swagger_codegen.api import json
 
 
 class Tag(BaseModel):
@@ -30,19 +30,19 @@ class Pet(BaseModel):
     tags: typing.Optional[typing.List[Tag]] = None
 
 
-def make_request(self: BaseApi, petid: int,) -> Pet:
+def make_request(
+    self: BaseApi,
+    petid: int,
+) -> Pet:
     """Find pet by ID"""
-
-    def serialize_item(item):
-        if isinstance(item, pydantic.BaseModel):
-            return item.dict()
-        return item
 
     body = None
 
     m = ApiRequest(
         method="GET",
-        path="/api/v3/pet/{petId}".format(petId=petid,),
+        path="/api/v3/pet/{petId}".format(
+            petId=petid,
+        ),
         content_type=None,
         body=body,
         headers=self._only_provided({}),
@@ -51,9 +51,16 @@ def make_request(self: BaseApi, petid: int,) -> Pet:
     )
     return self.make_request(
         {
-            "200": {"application/json": Pet, "application/xml": Pet,},
-            "400": {"default": None,},
-            "404": {"default": None,},
+            "200": {
+                "application/json": Pet,
+                "application/xml": Pet,
+            },
+            "400": {
+                "default": None,
+            },
+            "404": {
+                "default": None,
+            },
         },
         m,
     )
