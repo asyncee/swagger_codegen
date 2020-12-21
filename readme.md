@@ -32,7 +32,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 ```
 
 You can see [example source code](https://github.com/asyncee/swagger_codegen/tree/master/example)
-for [PetStore](http://petstore3.swagger.io:8080/) Api in example directory of a project.
+for [PetStore](http://petstore3.swagger.io/) Api in example directory of a project.
 
 You can test example client with following command:
 
