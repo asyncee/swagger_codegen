@@ -1,11 +1,7 @@
-from dataclasses import dataclass
-from dataclasses import field
+from dataclasses import dataclass, field
 from typing import Optional
 
-from swagger_codegen.api.types import Body
-from swagger_codegen.api.types import ContentType
-from swagger_codegen.api.types import Headers
-from swagger_codegen.api.types import StatusCode
+from swagger_codegen.api.types import Body, ContentType, Headers, StatusCode
 
 
 @dataclass

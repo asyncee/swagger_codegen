@@ -1,13 +1,11 @@
 from dataclasses import dataclass
+
+from swagger_codegen.api.adapter.base import HttpClientAdapter
 from swagger_codegen.api.client import ApiClient
 from swagger_codegen.api.configuration import Configuration
-from swagger_codegen.api.adapter.base import HttpClientAdapter
-
 
 from .apis.pet.api import PetApi
-
 from .apis.store.api import StoreApi
-
 from .apis.user.api import UserApi
 
 

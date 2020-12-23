@@ -1,6 +1,7 @@
 from unittest import mock
 
 from pydantic import BaseModel
+
 from swagger_codegen.api.base import BaseApi
 from swagger_codegen.api.client import ApiClient
 from swagger_codegen.api.configuration import Configuration

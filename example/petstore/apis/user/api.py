@@ -2,13 +2,15 @@ from __future__ import annotations
 
 from swagger_codegen.api.base import BaseApi
 
-from . import createUser
-from . import createUsersWithListInput
-from . import loginUser
-from . import logoutUser
-from . import getUserByName
-from . import updateUser
-from . import deleteUser
+from . import (
+    createUser,
+    createUsersWithListInput,
+    deleteUser,
+    getUserByName,
+    loginUser,
+    logoutUser,
+    updateUser,
+)
 
 
 class UserApi(BaseApi):

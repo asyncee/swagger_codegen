@@ -1,0 +1,139 @@
+name: Continuous Integration
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - '!*'
+  pull_request:
+jobs:
+  isort:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8.6, 3.9.1]
+        poetry-version: [1.1.4]
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2.2.0
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Setup Poetry
+        id: poetry
+        uses: ./.github/actions/poetry
+
+      - name: Setup cache
+        uses: actions/cache@v2.1.3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.poetry.outputs.full-python-version }}-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Install dependencies with Poetry
+        run: |
+          source $HOME/.poetry/env
+          poetry install --extras all
+
+      - name: Run Isort
+        run: |
+          source $HOME/.poetry/env
+          poetry run isort . --check
+  flake8:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8.6, 3.9.1]
+        poetry-version: [1.1.4]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2.2.0
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Setup Poetry
+        id: poetry
+        uses: ./.github/actions/poetry
+
+      - name: Setup cache
+        uses: actions/cache@v2.1.3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.poetry.outputs.full-python-version }}-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Install dependencies with Poetry
+        run: |
+          source $HOME/.poetry/env
+          poetry install --extras all
+
+      - name: Run Flake8
+        run: |
+          source $HOME/.poetry/env
+          poetry run flake8 --extend-exclude=example/ --max-line-length=120
+  black:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8.6, 3.9.1]
+        poetry-version: [1.1.4]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2.2.0
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Setup Poetry
+        id: poetry
+        uses: ./.github/actions/poetry
+
+      - name: Setup cache
+        uses: actions/cache@v2.1.3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.poetry.outputs.full-python-version }}-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Install dependencies with Poetry
+        run: |
+          source $HOME/.poetry/env
+          poetry install --extras all
+
+      - name: Run Black
+        run: |
+          source $HOME/.poetry/env
+          poetry run black --check .
+  pytest:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8.6, 3.9.1]
+        poetry-version: [1.1.4]
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2.2.0
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Setup Poetry
+        id: poetry
+        uses: ./.github/actions/poetry
+
+      - name: Setup cache
+        uses: actions/cache@v2.1.3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.poetry.outputs.full-python-version }}-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Install dependencies with Poetry
+        run: |
+          source $HOME/.poetry/env
+          poetry install --extras all
+
+      - name: Run Pytest
+        run: |
+          source $HOME/.poetry/env
+          poetry run pytest

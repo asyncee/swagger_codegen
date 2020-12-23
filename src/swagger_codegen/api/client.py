@@ -1,5 +1,4 @@
-from typing import Coroutine
-from typing import Union
+from typing import Coroutine, Union
 
 from swagger_codegen.api.adapter.base import HttpClientAdapter
 from swagger_codegen.api.configuration import Configuration

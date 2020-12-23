@@ -1,9 +1,10 @@
 import os
 from pathlib import Path
-from pkg_resources import get_distribution
 from typing import List
 
 from inflection import underscore
+from pkg_resources import get_distribution
+
 from swagger_codegen.parsing.endpoint import EndpointDescription
 
 from .package import PackageRenderer
@@ -26,7 +27,9 @@ class InstallablePackageRenderer(PackageRenderer):
         # from the package files (runtime modules)
         self._package_dir = self._project_dir / self._valid_python_package_name
         self._package_api_lib_name = "lib"
-        self._package_api_lib_module_name = f"{self._valid_python_package_name}.{self._package_api_lib_name}"
+        self._package_api_lib_module_name = (
+            f"{self._valid_python_package_name}.{self._package_api_lib_name}"
+        )
 
         self._setup_py_template = setup_py_template
         self._manifest_in_template = manifest_in_template
@@ -37,8 +40,7 @@ class InstallablePackageRenderer(PackageRenderer):
         self._render_setuptools()
 
     def _render_setuptools(self) -> None:
-        """ Render files necessary for packaging the new client library with setuptools.
-        """
+        """Render files necessary for packaging the new client library with setuptools."""
         (self._project_dir / "README.md").write_text(
             self._render(
                 self._readme_template,
@@ -46,7 +48,7 @@ class InstallablePackageRenderer(PackageRenderer):
                     "package_name": self._valid_python_package_name,
                     "pypi_name": self._package_name,
                     "package_api_lib_module_name": self._package_api_lib_module_name,
-                }
+                },
             )
         )
         ctx = {
@@ -65,16 +67,18 @@ class InstallablePackageRenderer(PackageRenderer):
         )
 
     def _render_low_level_lib(self, codegen_distribution: str) -> None:
-        """ Render ``swagger_codegen.api`` as ``<package_name>.lib``.
+        """Render ``swagger_codegen.api`` as ``<package_name>.lib``.
         This way we make the generated client package independent from ``swagger_codegen``,
         which saves our runtime from unnecessary dependencies in production.
         """
         dist = get_distribution(codegen_distribution)
-        src_lib_name = f'{codegen_distribution}.api'.encode('utf-8')
-        lib_location = Path(dist.location) / codegen_distribution / 'api'
-        lib = lib_location.rglob('*.py')
+        src_lib_name = f"{codegen_distribution}.api".encode("utf-8")
+        lib_location = Path(dist.location) / codegen_distribution / "api"
+        lib = lib_location.rglob("*.py")
         for src in lib:
-            lib_src = src.read_bytes().replace(src_lib_name, self._package_api_lib_module_name.encode('utf-8'))
+            lib_src = src.read_bytes().replace(
+                src_lib_name, self._package_api_lib_module_name.encode("utf-8")
+            )
             lib_path = self._package_api_lib_dir / src.relative_to(lib_location)
             if os.sep in str(lib_path):
                 lib_path.parent.mkdir(parents=True, exist_ok=True)

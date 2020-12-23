@@ -1,5 +1,9 @@
 from functools import partial
 
+import aiohttp
+from aiohttp import ContentTypeError
+
+from swagger_codegen.api import json
 from swagger_codegen.api.adapter.base import HttpClientAdapter
 from swagger_codegen.api.adapter.params_converter import (
     AiohttpParamsConverter,
@@ -8,10 +12,6 @@ from swagger_codegen.api.adapter.params_converter import (
 from swagger_codegen.api.request import ApiRequest
 from swagger_codegen.api.response import ApiResponse
 from swagger_codegen.api.types import APPLICATION_JSON
-from swagger_codegen.api import json
-
-import aiohttp
-from aiohttp import ContentTypeError
 
 
 class AiohttpAdapter(HttpClientAdapter):

@@ -1,7 +1,6 @@
 import inspect
 import logging
-from typing import Optional
-from typing import cast
+from typing import Optional, cast
 
 from swagger_codegen.api.client import ApiClient
 from swagger_codegen.api.configuration import Configuration, Hook, RequestHooks
@@ -68,7 +67,9 @@ class BaseApi:
         return deserialized_response
 
     def _select_response_type(
-        self, response_mapping: ResponseMapping, response: ApiResponse,
+        self,
+        response_mapping: ResponseMapping,
+        response: ApiResponse,
     ) -> Optional[ResponseType]:
         content_types = response_mapping.get(
             str(response.status_code)

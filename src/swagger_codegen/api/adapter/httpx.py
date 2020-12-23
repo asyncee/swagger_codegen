@@ -1,5 +1,7 @@
 from functools import partial
 
+import httpx
+
 from swagger_codegen.api import json
 from swagger_codegen.api.adapter.base import HttpClientAdapter
 from swagger_codegen.api.adapter.params_converter import (
@@ -9,8 +11,6 @@ from swagger_codegen.api.adapter.params_converter import (
 from swagger_codegen.api.request import ApiRequest
 from swagger_codegen.api.response import ApiResponse
 from swagger_codegen.api.types import APPLICATION_JSON
-
-import httpx
 
 
 class HttpxAdapter(HttpClientAdapter):

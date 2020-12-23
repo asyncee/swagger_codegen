@@ -3,8 +3,10 @@ import datetime as dt
 import pytest
 from multidict import MultiDict
 
-from swagger_codegen.api.adapter.params_converter import AiohttpParamsConverter
-from swagger_codegen.api.adapter.params_converter import DefaultParamsConverter
+from swagger_codegen.api.adapter.params_converter import (
+    AiohttpParamsConverter,
+    DefaultParamsConverter,
+)
 
 
 @pytest.fixture()
@@ -33,7 +35,12 @@ def test_default_params_converter(params):
 
 def test_aiohttp_default_params_converter(params):
     converter = AiohttpParamsConverter()
-    expected = MultiDict({"a": 1, "datetime": "2020-01-01T12:00:05",})
+    expected = MultiDict(
+        {
+            "a": 1,
+            "datetime": "2020-01-01T12:00:05",
+        }
+    )
     expected.add("list", 1)
     expected.add("list", 2)
     expected.add("list", 3)

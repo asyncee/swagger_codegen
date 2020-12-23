@@ -1,0 +1,27 @@
+name: Install Poetry
+description: Installs Poetry and also outputs the full Python version we are using for the cache.
+outputs:
+  full-python-version:
+    description: The full Python version we are using.
+    value: ${{ steps.full-python-version.outputs.version }}
+runs:
+  using: composite
+  steps:
+    - name: Get full Python version
+      id: full-python-version
+      run: |
+        echo ::set-output name=version::$(python -c "import sys; print('-'.join(str(v) for v in sys.version_info))")
+      shell: bash
+    - name: Install Poetry
+      run: |
+        curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py -o get-poetry.py
+        python get-poetry.py --version ${{matrix.poetry-version }}
+        source $HOME/.poetry/env
+        poetry config virtualenvs.in-project true
+        rm get-poetry.py
+      shell: bash
+    - name: Configure Poetry
+      run: |
+        source $HOME/.poetry/env
+        poetry config virtualenvs.in-project true
+      shell: bash
