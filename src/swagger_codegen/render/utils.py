@@ -30,3 +30,10 @@ def to_identifier(name: str) -> str:
     name = start_with_valid_characters(name)
     name = inflection.underscore(replace_chars(name))
     return strip_chars(name)
+
+
+def has_invalid_characters(name: str) -> bool:
+    for c in name:
+        if c not in string.ascii_letters + "_":
+            return True
+    return False

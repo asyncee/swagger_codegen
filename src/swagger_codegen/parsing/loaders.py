@@ -1,8 +1,11 @@
+from copy import deepcopy
 from pathlib import Path
 from typing import Optional
 
+from boltons.iterutils import remap
 from schemathesis import loaders
 from schemathesis.schemas import BaseSchema
+from swagger_codegen.render.utils import has_invalid_characters, to_classname
 
 DEFAULT_ENCODING = "utf-8"
 
@@ -46,23 +49,32 @@ def load_base_schema(schema_uri, encoding: Optional[str] = None) -> BaseSchema:
         schema = from_uri(schema_uri)
     else:
         schema = from_file(schema_uri, encoding=encoding or DEFAULT_ENCODING)
-    add_x_names(schema)
-    add_x_names_to_plain_response_objects(schema)
+    schema = add_component_names(schema)
+    schema = add_request_response_names(schema)
     return loaders.from_dict(schema)
 
 
-def add_x_names(schema):
+def add_component_names(schema: dict):
     """
     Add `x-name` attribute to each schema referenced as $ref.
 
     This step is needed to provide a name that will be used to render
     request or response data transfer objects for api client's methods.
     """
-    for name, schema in schema["components"]["schemas"].items():
-        schema["x-name"] = name
+    if "components" not in schema:
+        return schema
+
+    schema = deepcopy(schema)
+
+    for name, inner_schema in schema["components"]["schemas"].items():
+        if has_invalid_characters(name):
+            name = to_classname(name)
+        inner_schema["x-name"] = name
+
+    return schema
 
 
-def add_x_names_to_plain_response_objects(schema):
+def add_request_response_names(schema: dict):
     """Add `x-name` attribute to each inlined response object.
 
     Inlined response object is an object that is defined in `responses`
@@ -71,19 +83,32 @@ def add_x_names_to_plain_response_objects(schema):
     That is needed to provide a name that will
     be used to render response data transfer object for respective endpoint.
     """
-    if "paths" not in schema:
-        return
 
-    for uri, path in schema["paths"].items():
-        for method_name, method in path.items():
-            for status_code, description in method["responses"].items():
-                if "content" not in description:
-                    continue
-                if "application/json" not in description["content"]:
-                    continue
-                schema = description["content"]["application/json"]["schema"]
-                if "type" not in schema:
-                    continue
-                if schema["type"] != "object":
-                    continue
-                schema["x-name"] = f"Response{status_code}"
+    def visit(path, key, value):
+        def handle_path(path_, value_):
+            if tuple_startswith(path_, "paths") and "requestBody" in path_:
+                url = path_[1]
+                method_name = path_[2]
+                value_["x-name"] = to_classname(f"{url}{method_name}Request")
+            if tuple_startswith(path_, "paths") and "responses" in path_:
+                status_code = path_[4]
+                value_["x-name"] = f"Response{status_code}"
+            if tuple_startswith(path_, "components", "requestBodies"):
+                request_body_name = path_[2]
+                value_["x-name"] = request_body_name
+            return value_
+
+        if key == "schema" and "type" in value:
+            if value["type"] == "object" and "x-name" not in value:
+                value = handle_path(path, value)
+            elif value["type"] == "array":
+                value["items"] = handle_path(path, value["items"])
+        return key, value
+
+    return remap(schema, visit=visit)
+
+
+def tuple_startswith(tpl, *items):
+    if len(tpl) < len(items):
+        return False
+    return tpl[: len(items)] == items
