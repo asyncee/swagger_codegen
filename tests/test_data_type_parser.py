@@ -1,5 +1,4 @@
 import pytest
-
 from swagger_codegen.parsing.data_type import DataType, ObjectDataType
 from swagger_codegen.parsing.data_type_parser import make_data_type
 
@@ -46,6 +45,55 @@ def test_parse_all_of_any_of_one_of():
                 )
             ],
         )
+
+
+def test_parse_allof_oneof_anyof_without_names():
+    schema = {
+        "type": "object",
+        "properties": {
+            "source": {
+                "allOf": [
+                    {
+                        "type": "object",
+                        "properties": {
+                            "prop": {
+                                "type": "string",
+                            }
+                        },
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "prop": {
+                                "type": "integer",
+                            },
+                        },
+                    },
+                ]
+            }
+        },
+    }
+    assert make_data_type(schema) == ObjectDataType(
+        python_type=None,
+        members=[
+            DataType(
+                python_type="typing.Union[Source1, Source2]",
+                member_name="source",
+                member_value="None",
+                members=[
+                    ObjectDataType(
+                        python_type="Source1",
+                        is_recursive=True,
+                    ),
+                    ObjectDataType(
+                        python_type="Source2",
+                        is_recursive=True,
+                    ),
+                ],
+                is_optional_type=True,
+            )
+        ],
+    )
 
 
 def test_parse_enum():

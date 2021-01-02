@@ -3,6 +3,7 @@ from typing import Dict, List, Optional
 from pydantic import BaseModel
 from pydantic.utils import validate_field_name
 
+from ..render.utils import to_classname
 from .data_type import DataType, ObjectDataType
 
 Schema = dict
@@ -10,17 +11,42 @@ ParentTypes = List[str]
 
 
 def handle_all_any_one_of(
-    schema: Schema, parent_types: Optional[ParentTypes], for_writes: bool
+    schema: Schema,
+    parent_schema: Optional[Schema],
+    parent_types: Optional[ParentTypes],
+    for_writes: bool,
 ) -> Optional[DataType]:
     for field in ("allOf", "anyOf", "oneOf"):
         if field in schema:
             nested_schemas = schema[field]
             members = [
                 make_data_type(
-                    n, parent_types, parent_schema=schema, for_writes=for_writes
+                    member_def,
+                    parent_types,
+                    parent_schema=schema,
+                    for_writes=for_writes,
                 )
-                for n in nested_schemas
+                for member_def in nested_schemas
             ]
+
+            if parent_schema:
+                member_property_name = None
+
+                if "properties" in parent_schema:
+                    for property_field_name, property_schema in parent_schema[
+                        "properties"
+                    ].items():
+                        if property_schema is schema:
+                            member_property_name = property_field_name
+                            break
+
+                if member_property_name:
+                    for i, member in enumerate(members):
+                        if member.python_type is None:
+                            member.python_type = to_classname(
+                                f"{member_property_name}{i + 1}"
+                            )
+
             if len(members) == 1:
                 return DataType(
                     python_type=f"{members[0].python_type}", members=members
@@ -209,7 +235,7 @@ def make_data_type(
     if schema == {}:
         return DataType(python_type="None")
 
-    if typ := handle_all_any_one_of(schema, parent_types, for_writes):
+    if typ := handle_all_any_one_of(schema, parent_schema, parent_types, for_writes):
         return typ
 
     if "enum" in schema:
