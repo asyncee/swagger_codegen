@@ -1,0 +1,185 @@
+{
+   "openapi":"3.0.0",
+   "info":{
+      "title":"Client Portal Web API",
+      "description":"Production version of the Client Portal Web API",
+      "version":"1.0.0"
+   },
+   "paths":{
+      "/iserver/secdef/search":{
+         "post":{
+            "summary":"Search by symbol or name",
+            "tags":[
+               "Contract"
+            ],
+            "requestBody":{
+               "content":{
+                  "application/json":{
+                     "schema":{
+                        "type":"object",
+                        "required":[
+                           "symbol"
+                        ],
+                        "properties":{
+                           "symbol":{
+                              "type":"string",
+                              "description":"symbol or name to be searched"
+                           },
+                           "name":{
+                              "type":"boolean",
+                              "description":"should be true if the search is to be performed by name. false by default."
+                           },
+                           "secType":{
+                              "type":"string",
+                              "description":"If search is done by name, only the assets provided in this field will be returned. Currently, only STK is supported."
+                           }
+                        }
+                     }
+                  }
+               },
+               "description":"symbol or name to be searched",
+               "required":true
+            },
+            "responses":{
+               "200":{
+                  "description":"returns an array of results",
+                  "content":{
+                     "application/json":{
+                        "schema":{
+                           "type":"array",
+                           "items":{
+                              "type":"object",
+                              "properties":{
+                                 "conid":{
+                                    "type":"integer"
+                                 },
+                                 "companyHeader":{
+                                    "type":"string"
+                                 },
+                                 "companyName":{
+                                    "type":"string"
+                                 },
+                                 "symbol":{
+                                    "type":"string"
+                                 },
+                                 "description":{
+                                    "type":"string"
+                                 },
+                                 "opt":{
+                                    "type":"string"
+                                 },
+                                 "war":{
+                                    "type":"string"
+                                 },
+                                 "sections":{
+                                    "type":"array",
+                                    "items":{
+                                       "type":"object"
+                                    }
+                                 }
+                              }
+                           }
+                        }
+                     }
+                  }
+               },
+               "500":{
+                  "description":"error while processing the request",
+                  "content":{
+                     "application/json":{
+                        "schema":{
+                           "type":"object",
+                           "properties":{
+                              "error":{
+                                 "type":"string"
+                              }
+                           }
+                        }
+                     }
+                  }
+               }
+            }
+         }
+      },
+      "/iserver/account":{
+         "post":{
+            "summary":"Updates currently selected account to the provided account",
+            "description":"If an user has multiple accounts, and user wants to get orders, trades, etc. of an account other than currently selected account, then user can update the currently selected account using this API and then can fetch required information for the newly updated account.",
+            "tags":[
+               "Account"
+            ],
+            "requestBody":{
+               "content":{
+                  "application/json":{
+                     "schema":{
+                        "$ref":"#/components/schemas/set-account"
+                     }
+                  }
+               },
+               "description":"account id",
+               "required":true
+            },
+            "responses":{
+               "200":{
+                  "description":"an object containing updated account ID",
+                  "content":{
+                     "application/json":{
+                        "schema":{
+                           "type":"object",
+                           "properties":{
+                              "set":{
+                                 "type":"boolean"
+                              },
+                              "acctId":{
+                                 "type":"string"
+                              }
+                           }
+                        }
+                     }
+                  }
+               }
+            }
+         }
+      }
+   },
+   "servers":[
+      {
+         "url":"https://localhost:5000/v1/portal"
+      }
+   ],
+   "components":{
+      "requestBodies":{
+         "Body":{
+            "content":{
+               "application/json":{
+                  "schema":{
+                     "type":"object",
+                     "properties":{
+                        "acctIds":{
+                           "type":"array",
+                           "items":{
+                              "type":"string",
+                              "description":"account id"
+                           }
+                        }
+                     }
+                  }
+               }
+            },
+            "description":"an array of account ids",
+            "required":true
+         }
+      },
+      "schemas":{
+         "set-account":{
+            "type":"object",
+            "properties":{
+               "acctId":{
+                  "type":"string",
+                  "description":"Account ID"
+               }
+            }
+         }
+      }
+   }
+}

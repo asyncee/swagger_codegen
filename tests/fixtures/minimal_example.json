@@ -1,0 +1,170 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Title",
+    "description": "Desc",
+    "contact": {
+      "name": "Me",
+      "url": "https://github.com/coderfromhere",
+      "email": "me@example.com"
+    },
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://api-dev.example.com/v2",
+      "description": "Development server"
+    },
+    {
+      "url": "https://api-integration.example.com/v2",
+      "description": "Integration server"
+    },
+    {
+      "url": "https://api.example.com/v2",
+      "description": "Production server"
+    }
+  ],
+  "paths": {
+    "/auth": {
+      "post": {
+        "tags": [
+          "Authentication & Authorization"
+        ],
+        "summary": "Authentication",
+        "description": "Authentication",
+        "operationId": "auth",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "List of acceptable human languages for response.",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-HTTP-Method-Override",
+            "in": "header",
+            "description": "Put here the HTTP method you want, when making call by the POST method to avoid interference of nasty firewall rules.",
+            "required": false,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "apiKey": {
+                    "type": "string",
+                    "description": "The open api key that is given to the specific system."
+                  },
+                  "locale": {
+                    "type": "string",
+                    "description": "Locale"
+                  },
+                  "timezone": {
+                    "type": "string",
+                    "description": "Timezone in POSIX format."
+                  },
+                  "source": {
+                    "allOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "tenant": {
+                            "type": "string",
+                            "description": "The tenant to which the origin belongs."
+                          }
+                        }
+                      },
+                      {
+                        "title": "Source",
+                        "required": [
+                          "type",
+                          "name",
+                          "version",
+                          "instance"
+                        ],
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "system",
+                              "database",
+                              "file-system"
+                            ],
+                            "description": "The type of the source."
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "The name of the source."
+                          },
+                          "version": {
+                            "type": "string",
+                            "description": "The version of the source."
+                          },
+                          "instance": {
+                            "type": "string",
+                            "description": "Specific instance of the source."
+                          }
+                        },
+                        "x-tags": [
+                          "domain"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "title": "Response",
+                      "required": [
+                        "code",
+                        "locale"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "minimum": 0,
+                          "type": "integer",
+                          "description": "Response code"
+                        },
+                        "locale": {
+                          "type": "string",
+                          "description": "Response locale"
+                        }
+                      },
+                      "x-tags": [
+                        "system"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
