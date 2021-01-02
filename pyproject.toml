@@ -26,6 +26,7 @@ aiohttp = { version = "*", optional = true }
 requests = { version = "*", optional = true }
 httpx = { version = "^0.14", optional = true }
 black = { version = "*", allow-prereleases = true, optional = true }
+boltons = "^20.2.1"
 
 [tool.poetry.dev-dependencies]
 rich = "^0.8.8"
