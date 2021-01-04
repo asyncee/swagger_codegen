@@ -33,12 +33,10 @@ jobs:
 
       - name: Install dependencies with Poetry
         run: |
-          source $HOME/.poetry/env
           poetry install --extras all
 
       - name: Run Isort
         run: |
-          source $HOME/.poetry/env
           poetry run isort . --check
   flake8:
     runs-on: ubuntu-latest
@@ -65,12 +63,10 @@ jobs:
 
       - name: Install dependencies with Poetry
         run: |
-          source $HOME/.poetry/env
           poetry install --extras all
 
       - name: Run Flake8
         run: |
-          source $HOME/.poetry/env
           poetry run flake8 --extend-exclude=example/ --max-line-length=120
   black:
     runs-on: ubuntu-latest
@@ -97,12 +93,10 @@ jobs:
 
       - name: Install dependencies with Poetry
         run: |
-          source $HOME/.poetry/env
           poetry install --extras all
 
       - name: Run Black
         run: |
-          source $HOME/.poetry/env
           poetry run black --check .
   pytest:
     runs-on: ubuntu-latest
@@ -130,10 +124,8 @@ jobs:
 
       - name: Install dependencies with Poetry
         run: |
-          source $HOME/.poetry/env
           poetry install --extras all
 
       - name: Run Pytest
         run: |
-          source $HOME/.poetry/env
           poetry run pytest
