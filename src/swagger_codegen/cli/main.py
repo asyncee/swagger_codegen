@@ -3,6 +3,7 @@ from typing import Optional
 
 import rich
 import typer
+
 from swagger_codegen.cli.config import load_config
 from swagger_codegen.cli.imports import import_class, qualname
 from swagger_codegen.cli.setup_renderer import setup_renderer

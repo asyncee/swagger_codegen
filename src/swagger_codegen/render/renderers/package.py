@@ -1,16 +1,15 @@
 import shutil
 from collections import defaultdict
 from pathlib import Path
-from typing import List
-from typing import Set
+from typing import List, Set
 
 from swagger_codegen.parsing.data_type import DataType
 from swagger_codegen.parsing.endpoint import EndpointDescription
+
 from ..api import Api
 from ..renderer import Renderer
 from ..templates import render_template
-from ..utils import to_classname
-from ..utils import to_identifier
+from ..utils import to_classname, to_identifier
 
 
 class PackageRenderer(Renderer):
@@ -42,7 +41,9 @@ class PackageRenderer(Renderer):
 
         # name of a subpackage inside a generated client that provides a lower-level HTTP API implementation
         self._package_api_lib_name = "api"
-        self._package_api_lib_module_name = f"swagger_codegen.{self._package_api_lib_name}"
+        self._package_api_lib_module_name = (
+            f"swagger_codegen.{self._package_api_lib_name}"
+        )
 
         self._api_template = api_template
         self._endpoint_template = endpoint_template
@@ -66,7 +67,7 @@ class PackageRenderer(Renderer):
             self._render_api(api)
 
         self._render_client(apis)
-        self._render_low_level_lib('swagger_codegen')
+        self._render_low_level_lib("swagger_codegen")
 
     def _get_apis(self, endpoints: List[EndpointDescription]) -> List[Api]:
         endpoints_by_tags = defaultdict(list)
@@ -88,7 +89,7 @@ class PackageRenderer(Renderer):
         (self._package_dir / "__init__.py").write_text(
             self._render(
                 self._package_entrypoint_template,
-                {"package_api_lib_module_name": self._package_api_lib_module_name}
+                {"package_api_lib_module_name": self._package_api_lib_module_name},
             )
         )
 
@@ -97,7 +98,7 @@ class PackageRenderer(Renderer):
             {
                 "apis": apis,
                 "package_api_lib_module_name": self._package_api_lib_module_name,
-            }
+            },
         )
         (self._package_dir / "client.py").write_text(content)
 
@@ -112,7 +113,7 @@ class PackageRenderer(Renderer):
             {
                 "api": api,
                 "package_api_lib_module_name": self._package_api_lib_module_name,
-            }
+            },
         )
         (api_dir / "api.py").write_text(api_py_content)
 
@@ -122,7 +123,7 @@ class PackageRenderer(Renderer):
     def _render_endpoint(self, api_dir: str, endpoint: EndpointDescription):
         imports_block = render_template(
             self._endpoint_imports_template,
-            {"package_api_lib_module_name": self._package_api_lib_module_name}
+            {"package_api_lib_module_name": self._package_api_lib_module_name},
         )
         data_types_block = []
         data_types_to_render: List[DataType] = []
@@ -152,6 +153,5 @@ class PackageRenderer(Renderer):
         (api_dir / endpoint.name).with_suffix(".py").write_text(endpoint_content)
 
     def _render_low_level_lib(self, codegen_distribution: str) -> None:
-        """ do nothing to preserve backward compatibility
-        """
+        """do nothing to preserve backward compatibility"""
         return

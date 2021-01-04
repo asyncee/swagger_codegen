@@ -1,7 +1,6 @@
 from collections import defaultdict
 from itertools import groupby
-from typing import List
-from typing import Optional
+from typing import List, Optional
 
 import attr
 from inflection import underscore

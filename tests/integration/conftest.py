@@ -7,8 +7,9 @@ import time
 
 import pytest
 import uvicorn
-from swagger_codegen.cli.main import generate
 from uvicorn import Config
+
+from swagger_codegen.cli.main import generate
 
 from .example_api import app
 
@@ -57,7 +58,8 @@ def example_api_client(server):
     tempdir = tempfile.mkdtemp()
     generate(uri=server.url("/openapi.json"), package="swclient", directory=tempdir)
     sys.path.append(tempdir)
-    from swagger_codegen.api.adapter.requests import RequestsAdapter
     from swclient import Configuration, new_client
+
+    from swagger_codegen.api.adapter.requests import RequestsAdapter
 
     yield new_client(RequestsAdapter(), Configuration(host=server.url("")))

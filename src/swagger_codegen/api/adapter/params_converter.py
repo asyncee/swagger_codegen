@@ -1,12 +1,6 @@
 import abc
 import datetime as dt
-from typing import Any
-from typing import Callable
-from typing import Dict
-from typing import MutableMapping
-from typing import Optional
-from typing import Type
-from typing import TypeVar
+from typing import Any, Callable, Dict, MutableMapping, Optional, Type, TypeVar
 
 from multidict import MultiDict
 

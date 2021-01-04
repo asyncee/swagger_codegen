@@ -1,13 +1,7 @@
-from dataclasses import asdict
-from dataclasses import dataclass
-from dataclasses import field
+from dataclasses import asdict, dataclass, field
 from typing import Optional
 
-from swagger_codegen.api.types import Body
-from swagger_codegen.api.types import ContentType
-from swagger_codegen.api.types import Cookies
-from swagger_codegen.api.types import Headers
-from swagger_codegen.api.types import Query
+from swagger_codegen.api.types import Body, ContentType, Cookies, Headers, Query
 
 
 @dataclass

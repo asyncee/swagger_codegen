@@ -1,14 +1,14 @@
 from __future__ import annotations
 
 import datetime
-import pydantic
 import typing
 
+import pydantic
 from pydantic import BaseModel
 
+from swagger_codegen.api import json
 from swagger_codegen.api.base import BaseApi
 from swagger_codegen.api.request import ApiRequest
-from swagger_codegen.api import json
 
 
 class User(BaseModel):

@@ -1,5 +1,4 @@
-from typing import Generator
-from typing import Type
+from typing import Generator, Type
 
 from schemathesis.schemas import BaseSchema
 

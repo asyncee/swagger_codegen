@@ -27,6 +27,8 @@ requests = { version = "*", optional = true }
 httpx = { version = "^0.14", optional = true }
 black = { version = "*", allow-prereleases = true, optional = true }
 boltons = "^20.2.1"
+isort = { version = "*", optional = true }
+flake8 = { version = "*", optional = true }
 
 [tool.poetry.dev-dependencies]
 rich = "^0.8.8"
@@ -41,8 +43,8 @@ uvicorn = "^0.13.2"
 [tool.poetry.extras]
 sync = ["requests"]
 async = ["aiohttp", "httpx"]
-black = ["black"]
-all = ["aiohttp", "requests", "httpx", "black"]
+checks = ["black", "isort", "flake8"]
+all = ["aiohttp", "requests", "httpx", "checks"]
 
 [tool.poetry.scripts]
 swagger_codegen = 'swagger_codegen.cli.main:app'
@@ -51,3 +53,7 @@ swagger_codegen = 'swagger_codegen.cli.main:app'
 requires = ["poetry>=0.12"]
 build-backend = "poetry.masonry.api"
 
+[tool.isort]
+profile = "black"
+src_paths = [ "src" ]
+known_first_party = [ "swagger_codegen" ]

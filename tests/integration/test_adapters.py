@@ -7,6 +7,7 @@ import aiohttp
 import httpx
 import pytest
 from pydantic import BaseModel
+
 from swagger_codegen.api import json
 from swagger_codegen.api.adapter.aiohttp import AiohttpAdapter
 from swagger_codegen.api.adapter.base import HttpClientAdapter
