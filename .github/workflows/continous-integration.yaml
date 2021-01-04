@@ -67,7 +67,7 @@ jobs:
 
       - name: Run Flake8
         run: |
-          poetry run flake8 --extend-exclude=example/ --max-line-length=120
+          poetry run flake8 src
   black:
     runs-on: ubuntu-latest
     strategy:
