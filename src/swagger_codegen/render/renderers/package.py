@@ -40,7 +40,8 @@ class PackageRenderer(Renderer):
         self._project_dir = self._directory / self._package_name
         self._package_dir = self._project_dir
 
-        # name of a subpackage inside a generated client that provides a lower-level HTTP API implementation
+        # Name of a subpackage inside a generated client that provides
+        # a lower-level HTTP API implementation.
         self._package_api_lib_name = "api"
         self._package_api_lib_module_name = f"swagger_codegen.{self._package_api_lib_name}"
 

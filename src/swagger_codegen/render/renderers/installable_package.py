@@ -24,8 +24,9 @@ class InstallablePackageRenderer(PackageRenderer):
 
         self._project_dir = self._directory / self._package_name
         self._valid_python_package_name = underscore(self._package_name)
-        # second level of nesting is necessary to separate `setup.py` and meta-files (readme, tests etc)
-        # from the package files (runtime modules)
+
+        # Second level of nesting is necessary to separate `setup.py` and
+        # meta-files (readme, tests etc) from the package files (runtime modules).
         self._package_dir = self._project_dir / self._valid_python_package_name
         self._package_api_lib_name = "lib"
         self._package_api_lib_module_name = (
