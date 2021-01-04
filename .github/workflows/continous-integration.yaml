@@ -34,7 +34,6 @@ jobs:
       - name: Install dependencies with Poetry
         run: |
           poetry install --extras all
-          poetry install isort
 
       - name: Run Isort
         run: |
@@ -65,7 +64,6 @@ jobs:
       - name: Install dependencies with Poetry
         run: |
           poetry install --extras all
-          poetry install flake8
 
       - name: Run Flake8
         run: |
@@ -96,7 +94,6 @@ jobs:
       - name: Install dependencies with Poetry
         run: |
           poetry install --extras all
-          poetry install black
 
       - name: Run Black
         run: |
