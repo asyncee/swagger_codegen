@@ -1,4 +1,5 @@
 import pytest
+
 from swagger_codegen.parsing.data_type import DataType, ObjectDataType
 from swagger_codegen.parsing.data_type_parser import make_data_type
 
@@ -20,9 +21,7 @@ def test_parse_all_of_any_of_one_of():
 
     for field in fields:
         data_type = make_data_type({field: [int_schema]})
-        assert data_type == DataType(
-            python_type="int", members=[DataType(python_type="int")]
-        )
+        assert data_type == DataType(python_type="int", members=[DataType(python_type="int")])
 
         data_type = make_data_type({field: [int_schema, {}]})
         assert data_type == DataType(
@@ -110,18 +109,14 @@ def test_parse_missing_schema():
 
 
 def test_parse_string():
-    assert make_data_type({"type": "string", "format": "binary"}) == DataType(
-        python_type="bytes"
-    )
+    assert make_data_type({"type": "string", "format": "binary"}) == DataType(python_type="bytes")
     assert make_data_type({"type": "string", "format": "date-time"}) == DataType(
         python_type="datetime.datetime"
     )
     assert make_data_type({"type": "string", "format": "date"}) == DataType(
         python_type="datetime.date"
     )
-    assert make_data_type({"type": "string", "format": "time"}) == DataType(
-        python_type="time.time"
-    )
+    assert make_data_type({"type": "string", "format": "time"}) == DataType(python_type="time.time")
     assert make_data_type({"type": "string"}) == DataType(python_type="str")
 
 
@@ -133,9 +128,7 @@ def test_parse_primitive_types():
 
 
 def test_parse_array():
-    assert make_data_type({"type": "array", "items": {}}) == DataType(
-        python_type="typing.List"
-    )
+    assert make_data_type({"type": "array", "items": {}}) == DataType(python_type="typing.List")
     assert make_data_type({"type": "array", "items": {"type": "integer"}}) == DataType(
         python_type="typing.List[int]", members=[DataType(python_type="int")]
     )
@@ -146,9 +139,7 @@ def test_parse_object():
 
     assert make_data_type(
         {"type": "object", "additionalProperties": {"type": "boolean"}}
-    ) == DataType(
-        python_type="typing.Dict[str, bool]", members=[DataType(python_type="bool")]
-    )
+    ) == DataType(python_type="typing.Dict[str, bool]", members=[DataType(python_type="bool")])
 
 
 def test_parse_additional_properties():
@@ -177,9 +168,7 @@ def test_parse_complex_object():
                 member_value="None",
                 is_optional_type=True,
             ),
-            DataType(
-                python_type="str", member_name="field2", member_value="'some-value'"
-            ),
+            DataType(python_type="str", member_name="field2", member_value="'some-value'"),
         ],
     )
 
@@ -198,9 +187,7 @@ def test_parse_complex_object_read_only():
     ) == ObjectDataType(
         python_type="Obj1",
         members=[
-            DataType(
-                python_type="str", member_name="field2", member_value="'some-value'"
-            ),
+            DataType(python_type="str", member_name="field2", member_value="'some-value'"),
         ],
     )
 

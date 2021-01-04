@@ -1,5 +1,6 @@
-import datetime as dt
 from typing import Dict
+
+import datetime as dt
 
 from fastapi import FastAPI
 from pydantic import BaseModel

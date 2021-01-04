@@ -8,5 +8,5 @@ test:
 	pytest src
 
 style:
-	isort src
-	black src
+	isort src example tests
+	black src example tests

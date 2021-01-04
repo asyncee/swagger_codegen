@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-import datetime
 import typing
+
+import datetime
 
 import pydantic
 from pydantic import BaseModel

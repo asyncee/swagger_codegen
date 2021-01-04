@@ -1,6 +1,7 @@
+from typing import Callable
+
 import asyncio
 import os
-from typing import Callable
 from urllib.parse import urljoin
 
 import aiohttp

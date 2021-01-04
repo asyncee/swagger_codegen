@@ -1,5 +1,6 @@
-import datetime as dt
 import typing
+
+import datetime as dt
 
 import pytest
 from pydantic import BaseModel

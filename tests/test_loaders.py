@@ -1,6 +1,6 @@
 from boltons.iterutils import remap
-from swagger_codegen.parsing.loaders import (from_file, load_base_schema,
-                                             tuple_startswith)
+
+from swagger_codegen.parsing.loaders import from_file, load_base_schema, tuple_startswith
 
 
 def test_from_file():

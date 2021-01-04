@@ -80,6 +80,4 @@ def test_multiple_responses():
 
     # 200
     adapter.call = mock.Mock(return_value=response_200)
-    assert api.make_request(response_mapping, request) == ResponseA(
-        message="response-a"
-    )
+    assert api.make_request(response_mapping, request) == ResponseA(message="response-a")
