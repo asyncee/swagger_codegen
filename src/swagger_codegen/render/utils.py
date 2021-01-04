@@ -7,9 +7,7 @@ allowed_chars = string.ascii_letters + string.digits + "_"
 
 
 def start_with_valid_characters(name: str) -> str:
-    return "".join(
-        c for c in dropwhile(lambda s: s not in string.ascii_letters + "_", name)
-    )
+    return "".join(c for c in dropwhile(lambda s: s not in string.ascii_letters + "_", name))
 
 
 def replace_chars(name: str) -> str:

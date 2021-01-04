@@ -1,6 +1,7 @@
+from typing import Optional, cast
+
 import inspect
 import logging
-from typing import Optional, cast
 
 from swagger_codegen.api.client import ApiClient
 from swagger_codegen.api.configuration import Configuration, Hook, RequestHooks
@@ -47,9 +48,7 @@ class BaseApi:
 
             return _wrap_coroutine()
 
-        return self._handle_result(
-            response_mapping, api_request, cast(ApiResponse, result)
-        )
+        return self._handle_result(response_mapping, api_request, cast(ApiResponse, result))
 
     def _handle_result(
         self,
@@ -58,9 +57,7 @@ class BaseApi:
         api_response: ApiResponse,
     ) -> DeserializedResponse:
         response_type = self._select_response_type(response_mapping, api_response)
-        deserialized_response = self._deserializer.deserialize(
-            response_type, api_response.body
-        )
+        deserialized_response = self._deserializer.deserialize(response_type, api_response.body)
         if self._raise_for_status and api_response.is_error():
             raise ErrorApiResponse(api_request, api_response, deserialized_response)
 
@@ -71,9 +68,9 @@ class BaseApi:
         response_mapping: ResponseMapping,
         response: ApiResponse,
     ) -> Optional[ResponseType]:
-        content_types = response_mapping.get(
-            str(response.status_code)
-        ) or response_mapping.get("default")
+        content_types = response_mapping.get(str(response.status_code)) or response_mapping.get(
+            "default"
+        )
 
         if content_types is None:
             return None

@@ -1,7 +1,8 @@
+from typing import List, Set
+
 import shutil
 from collections import defaultdict
 from pathlib import Path
-from typing import List, Set
 
 from swagger_codegen.parsing.data_type import DataType
 from swagger_codegen.parsing.endpoint import EndpointDescription
@@ -41,9 +42,7 @@ class PackageRenderer(Renderer):
 
         # name of a subpackage inside a generated client that provides a lower-level HTTP API implementation
         self._package_api_lib_name = "api"
-        self._package_api_lib_module_name = (
-            f"swagger_codegen.{self._package_api_lib_name}"
-        )
+        self._package_api_lib_module_name = f"swagger_codegen.{self._package_api_lib_name}"
 
         self._api_template = api_template
         self._endpoint_template = endpoint_template
@@ -143,9 +142,7 @@ class PackageRenderer(Renderer):
                 )
                 _rendered_types.add(data_type.python_type)
 
-        endpoint_block = render_template(
-            self._endpoint_template, {"endpoint": endpoint}
-        )
+        endpoint_block = render_template(self._endpoint_template, {"endpoint": endpoint})
 
         endpoint_content = "\n".join([imports_block, *data_types_block, endpoint_block])
         endpoint_content = self._post_process(endpoint_content)

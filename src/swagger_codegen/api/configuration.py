@@ -1,6 +1,7 @@
+from typing import Callable, Dict, List, Literal
+
 import enum
 from dataclasses import dataclass, field
-from typing import Callable, Dict, List, Literal
 
 from swagger_codegen.api.request import ApiRequest
 

@@ -1,10 +1,12 @@
+from typing import Optional
+
 from copy import deepcopy
 from pathlib import Path
-from typing import Optional
 
 from boltons.iterutils import remap
 from schemathesis import loaders
 from schemathesis.schemas import BaseSchema
+
 from swagger_codegen.render.utils import has_invalid_characters, to_classname
 
 DEFAULT_ENCODING = "utf-8"

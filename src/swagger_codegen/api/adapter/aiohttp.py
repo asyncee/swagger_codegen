@@ -5,10 +5,7 @@ from aiohttp import ContentTypeError
 
 from swagger_codegen.api import json
 from swagger_codegen.api.adapter.base import HttpClientAdapter
-from swagger_codegen.api.adapter.params_converter import (
-    AiohttpParamsConverter,
-    ParamsConverter,
-)
+from swagger_codegen.api.adapter.params_converter import AiohttpParamsConverter, ParamsConverter
 from swagger_codegen.api.request import ApiRequest
 from swagger_codegen.api.response import ApiResponse
 from swagger_codegen.api.types import APPLICATION_JSON
@@ -38,9 +35,7 @@ class AiohttpAdapter(HttpClientAdapter):
     async def _read(self, make_request, api_request: ApiRequest):
         async with make_request(
             url=api_request.path,
-            params=self._params_converter.convert_query_params(
-                api_request.query_params
-            ),
+            params=self._params_converter.convert_query_params(api_request.query_params),
             headers=api_request.headers,
             cookies=api_request.cookies,
         ) as response:
@@ -49,17 +44,12 @@ class AiohttpAdapter(HttpClientAdapter):
     async def _write(self, make_request, api_request: ApiRequest):
         params = dict(
             url=api_request.path,
-            params=self._params_converter.convert_query_params(
-                api_request.query_params
-            ),
+            params=self._params_converter.convert_query_params(api_request.query_params),
             headers=api_request.headers,
             cookies=api_request.cookies,
         )
 
-        if (
-            api_request.body is not None
-            and api_request.content_type == APPLICATION_JSON
-        ):
+        if api_request.body is not None and api_request.content_type == APPLICATION_JSON:
             params["data"] = json.dumps(api_request.body)
             params["headers"] = {**params["headers"], "Content-Type": APPLICATION_JSON}
         else:

@@ -33,9 +33,7 @@ def handle_all_any_one_of(
                 member_property_name = None
 
                 if "properties" in parent_schema:
-                    for property_field_name, property_schema in parent_schema[
-                        "properties"
-                    ].items():
+                    for property_field_name, property_schema in parent_schema["properties"].items():
                         if property_schema is schema:
                             member_property_name = property_field_name
                             break
@@ -43,21 +41,15 @@ def handle_all_any_one_of(
                 if member_property_name:
                     for i, member in enumerate(members):
                         if member.python_type is None:
-                            member.python_type = to_classname(
-                                f"{member_property_name}{i + 1}"
-                            )
+                            member.python_type = to_classname(f"{member_property_name}{i + 1}")
 
             if len(members) == 1:
-                return DataType(
-                    python_type=f"{members[0].python_type}", members=members
-                )
+                return DataType(python_type=f"{members[0].python_type}", members=members)
 
             types = [r.python_type for r in members]
 
             nested_types = ", ".join(types)
-            return DataType(
-                python_type=f"typing.Union[{nested_types}]", members=members
-            )
+            return DataType(python_type=f"typing.Union[{nested_types}]", members=members)
     return None
 
 
@@ -91,9 +83,7 @@ def handle_primitives(schema: Schema) -> DataType:
     return DataType(python_type=typemap[schema["type"]])
 
 
-def handle_array(
-    schema: Schema, parent_types: Optional[ParentTypes], for_writes: bool
-) -> DataType:
+def handle_array(schema: Schema, parent_types: Optional[ParentTypes], for_writes: bool) -> DataType:
     if schema["items"] == {}:
         return DataType(python_type="typing.List")
 
@@ -103,18 +93,11 @@ def handle_array(
         parent_schema=schema,
         for_writes=for_writes,
     )
-    return DataType(
-        python_type=f"typing.List[{inner_type.python_type}]", members=[inner_type]
-    )
+    return DataType(python_type=f"typing.List[{inner_type.python_type}]", members=[inner_type])
 
 
-def handle_object_dict(
-    schema: Schema, parent_types: Optional[ParentTypes], for_writes: bool
-):
-    if (
-        isinstance(schema["additionalProperties"], bool)
-        or not schema["additionalProperties"]
-    ):
+def handle_object_dict(schema: Schema, parent_types: Optional[ParentTypes], for_writes: bool):
+    if isinstance(schema["additionalProperties"], bool) or not schema["additionalProperties"]:
         return DataType(python_type="typing.Dict")
 
     inner_type = make_data_type(
@@ -185,7 +168,9 @@ def handle_object(
         for parent_property_name, parent_property_schema in parent_props:
             if parent_property_schema is schema:
                 parent_name_part = "_".join([p for p in parent_types if p is not None])
-                parent_type_name = f"{parent_name_part}{parent_property_name[0].upper()}{parent_property_name[1:]}"
+                parent_type_name = (
+                    f"{parent_name_part}{parent_property_name[0].upper()}{parent_property_name[1:]}"
+                )
                 break
 
     if parent_type_name in parent_types:

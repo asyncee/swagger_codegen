@@ -4,10 +4,7 @@ import requests
 
 from swagger_codegen.api import json
 from swagger_codegen.api.adapter.base import HttpClientAdapter
-from swagger_codegen.api.adapter.params_converter import (
-    DefaultParamsConverter,
-    ParamsConverter,
-)
+from swagger_codegen.api.adapter.params_converter import DefaultParamsConverter, ParamsConverter
 from swagger_codegen.api.request import ApiRequest
 from swagger_codegen.api.response import ApiResponse
 from swagger_codegen.api.types import APPLICATION_JSON
@@ -40,9 +37,7 @@ class RequestsAdapter(HttpClientAdapter):
     def _read(self, make_request, api_request: ApiRequest):
         response = make_request(
             url=api_request.path,
-            params=self._params_converter.convert_query_params(
-                api_request.query_params
-            ),
+            params=self._params_converter.convert_query_params(api_request.query_params),
             headers=api_request.headers,
             cookies=api_request.cookies,
         )
@@ -51,9 +46,7 @@ class RequestsAdapter(HttpClientAdapter):
     def _write(self, make_request, api_request: ApiRequest):
         params = dict(
             url=api_request.path,
-            params=self._params_converter.convert_query_params(
-                api_request.query_params
-            ),
+            params=self._params_converter.convert_query_params(api_request.query_params),
             headers=api_request.headers,
             cookies=api_request.cookies,
         )

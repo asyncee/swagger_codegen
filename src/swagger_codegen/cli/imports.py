@@ -1,5 +1,6 @@
-import importlib
 from typing import Type
+
+import importlib
 
 
 def qualname(cls: Type) -> str:

@@ -1,6 +1,7 @@
+from typing import Any, Callable, Dict, MutableMapping, Optional, Type, TypeVar
+
 import abc
 import datetime as dt
-from typing import Any, Callable, Dict, MutableMapping, Optional, Type, TypeVar
 
 from multidict import MultiDict
 
@@ -14,9 +15,7 @@ class ParamsConverter(abc.ABC):
 
 
 class DefaultParamsConverter(ParamsConverter):
-    def __init__(
-        self, handlers: Optional[Dict[Type[T], Callable[[Dict, str, T], None]]] = None
-    ):
+    def __init__(self, handlers: Optional[Dict[Type[T], Callable[[Dict, str, T], None]]] = None):
         handlers = handlers or {}
         default_handlers = {
             list: self.handle_list,

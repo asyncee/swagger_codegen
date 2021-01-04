@@ -1,6 +1,7 @@
+from typing import List
+
 import os
 from pathlib import Path
-from typing import List
 
 from inflection import underscore
 from pkg_resources import get_distribution
@@ -58,9 +59,7 @@ class InstallablePackageRenderer(PackageRenderer):
             "package_description": self._package_name,
         }
         # render <project>/setup.py
-        (self._project_dir / "setup.py").write_text(
-            self._render(self._setup_py_template, ctx)
-        )
+        (self._project_dir / "setup.py").write_text(self._render(self._setup_py_template, ctx))
         # render <project>/MANIFEST.in necessary for setuptools auto-collector
         (self._project_dir / "MANIFEST.in").write_text(
             self._render(self._manifest_in_template, ctx)

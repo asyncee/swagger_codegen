@@ -1,6 +1,7 @@
+from typing import List, Optional
+
 from collections import defaultdict
 from itertools import groupby
-from typing import List, Optional
 
 import attr
 from inflection import underscore
@@ -95,9 +96,7 @@ class EndpointDescription:
             self.responses, key=lambda o: o.status_code
         ):
             for response in responses_by_status:
-                result[status_code][
-                    response.content_type
-                ] = response.data_type.python_type
+                result[status_code][response.content_type] = response.data_type.python_type
         return dict(result)
 
     @property
@@ -151,9 +150,7 @@ class EndpointDescription:
                 continue
             for parameter_name, parameter_body in container["properties"].items():
                 is_required = parameter_name in container["required"]
-                arguments_.append(
-                    self.to_argument(parameter_name, parameter_body, is_required)
-                )
+                arguments_.append(self.to_argument(parameter_name, parameter_body, is_required))
 
         return sorted(arguments_, key=lambda arg: arg["required"] is False)
 

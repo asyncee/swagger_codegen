@@ -1,5 +1,6 @@
-import logging
 from typing import Optional
+
+import logging
 
 import rich
 import typer

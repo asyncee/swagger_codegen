@@ -1,5 +1,6 @@
-import abc
 from typing import Any, Optional
+
+import abc
 
 import pydantic
 
@@ -10,16 +11,12 @@ DeserializedResponse = Optional[Any]
 
 class ResponseDeserializer(abc.ABC):
     @abc.abstractmethod
-    def deserialize(
-        self, deserialize_to: ResponseType, model_body
-    ) -> DeserializedResponse:
+    def deserialize(self, deserialize_to: ResponseType, model_body) -> DeserializedResponse:
         pass
 
 
 class DefaultResponseDeserializer(ResponseDeserializer):
-    def deserialize(
-        self, deserialize_to: ResponseType, model_body
-    ) -> DeserializedResponse:
+    def deserialize(self, deserialize_to: ResponseType, model_body) -> DeserializedResponse:
         if deserialize_to is None:
             return None
 

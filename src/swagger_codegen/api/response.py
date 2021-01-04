@@ -1,5 +1,6 @@
-from dataclasses import dataclass, field
 from typing import Optional
+
+from dataclasses import dataclass, field
 
 from swagger_codegen.api.types import Body, ContentType, Headers, StatusCode
 

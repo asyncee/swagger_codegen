@@ -5,9 +5,7 @@ try:
 
     def setup_logging(level=logging.DEBUG):
         FORMAT = "%(message)s"
-        logging.basicConfig(
-            level=level, format=FORMAT, datefmt="[%X] ", handlers=[RichHandler()]
-        )
+        logging.basicConfig(level=level, format=FORMAT, datefmt="[%X] ", handlers=[RichHandler()])
 
 
 except ImportError:
