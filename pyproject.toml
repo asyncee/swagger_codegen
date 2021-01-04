@@ -54,5 +54,13 @@ build-backend = "poetry.masonry.api"
 
 [tool.isort]
 profile = "black"
-src_paths = [ "src" ]
-known_first_party = [ "swagger_codegen" ]
+line_length = 100
+src_paths = ["src"]
+known_typing = ["typing", "types", "typing_extensions", "mypy", "mypy_extensions"]
+known_first_party = ["swagger_codegen"]
+sections = ["FUTURE", "TYPING", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
+default_section = "THIRDPARTY"
+
+[tool.black]
+line-length = 100
+target-version = ['py38']

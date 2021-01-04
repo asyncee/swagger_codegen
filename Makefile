@@ -6,3 +6,7 @@ bootstrap:
 test:
 	pytest -s --ff tests
 	pytest src
+
+style:
+	isort src
+	black src
