@@ -1,4 +1,5 @@
 ## Swagger codegen for Python
+![Continuous Integration](https://github.com/asyncee/swagger_codegen/workflows/Continuous%20Integration/badge.svg)
 
 ### Installation
 
