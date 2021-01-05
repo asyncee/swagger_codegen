@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from swagger_codegen.api import json
 
 
-class TestPydanticClass(BaseModel):
+class PydanticTestClass(BaseModel):
     field: str
 
 
@@ -58,7 +58,7 @@ def test_json_dumps():
                 "tuple": [1, 2, 3],
                 "set": [1, 2, 3],
                 "complex_list": [
-                    TestPydanticClass(field="one"),
+                    PydanticTestClass(field="one"),
                     1,
                     2,
                     3,
