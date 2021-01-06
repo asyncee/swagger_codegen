@@ -25,7 +25,7 @@ boltons = "^20.2.1"
 
 aiohttp = { version = "*", optional = true }
 requests = { version = "*", optional = true }
-httpx = { version = "^0.14", optional = true }
+httpx = { version = ">=0.14,<0.17", optional = true }
 
 [tool.poetry.dev-dependencies]
 rich = "^0.8.8"
