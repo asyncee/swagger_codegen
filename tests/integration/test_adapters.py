@@ -23,7 +23,7 @@ def requests_adapter():
     return RequestsAdapter()
 
 
-@pytest.yield_fixture
+@pytest.fixture
 def aiohttp_adapter():
     class AiohttpSyncAdapter(HttpClientAdapter):
         def call(self, api_request: ApiRequest) -> ApiResponse:
@@ -37,7 +37,7 @@ def aiohttp_adapter():
     return AiohttpSyncAdapter()
 
 
-@pytest.yield_fixture
+@pytest.fixture
 def httpx_adapter():
     class HttpxSyncAdapter(HttpClientAdapter):
         def call(self, api_request: ApiRequest) -> ApiResponse:

@@ -44,7 +44,7 @@ def free_port():
     return port
 
 
-@pytest.yield_fixture(scope="session")
+@pytest.fixture(scope="session")
 def server(free_port):
     config = Config(app, port=free_port)
     server = Server(config=config)
@@ -53,7 +53,7 @@ def server(free_port):
         yield server
 
 
-@pytest.yield_fixture(scope="session")
+@pytest.fixture(scope="session")
 def example_api_client(server):
     tempdir = tempfile.mkdtemp()
     generate(uri=server.url("/openapi.json"), package="swclient", directory=tempdir)
