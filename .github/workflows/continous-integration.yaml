@@ -26,7 +26,7 @@ jobs:
         uses: ./.github/actions/poetry
 
       - name: Setup cache
-        uses: actions/cache@v2.1.3
+        uses: actions/cache@v2.1.4
         with:
           path: .venv
           key: venv-${{ runner.os }}-${{ steps.poetry.outputs.full-python-version }}-${{ hashFiles('**/poetry.lock') }}
@@ -56,7 +56,7 @@ jobs:
         uses: ./.github/actions/poetry
 
       - name: Setup cache
-        uses: actions/cache@v2.1.3
+        uses: actions/cache@v2.1.4
         with:
           path: .venv
           key: venv-${{ runner.os }}-${{ steps.poetry.outputs.full-python-version }}-${{ hashFiles('**/poetry.lock') }}
@@ -86,7 +86,7 @@ jobs:
         uses: ./.github/actions/poetry
 
       - name: Setup cache
-        uses: actions/cache@v2.1.3
+        uses: actions/cache@v2.1.4
         with:
           path: .venv
           key: venv-${{ runner.os }}-${{ steps.poetry.outputs.full-python-version }}-${{ hashFiles('**/poetry.lock') }}
@@ -117,7 +117,7 @@ jobs:
         uses: ./.github/actions/poetry
 
       - name: Setup cache
-        uses: actions/cache@v2.1.3
+        uses: actions/cache@v2.1.4
         with:
           path: .venv
           key: venv-${{ runner.os }}-${{ steps.poetry.outputs.full-python-version }}-${{ hashFiles('**/poetry.lock') }}
