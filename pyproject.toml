@@ -21,7 +21,7 @@ toml = "^0.10.0"
 inflection = "^0.5"
 schemathesis = "1.1.0"
 boltons = "^20.2.1"
-rich = "^9.6.1"
+rich = ">=9.6.1,<11.0.0"
 httpx = { version = "*", optional = true }
 aiohttp = { version = "*", optional = true }
 requests = { version = "*", optional = true }
