@@ -131,6 +131,6 @@ jobs:
           poetry run pytest --cov=src/swagger_codegen --cov-report=xml
 
       - name: Report Coverage
-        uses: codecov/codecov-action@v1.2.0
+        uses: codecov/codecov-action@v1.4.1
         with:
           files: ./coverage.xml
