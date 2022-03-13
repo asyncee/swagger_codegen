@@ -14,7 +14,7 @@ keywords = ["swagger-codegen", "openapi", "swagger", "pydantic"]
 python = "^3.8"
 pydantic = "^1.4"
 multidict = "^5"
-jinja2 = "^2.11.1"
+jinja2 = ">=2.11.1,<4.0.0"
 click = "^7.1.1"
 typer = "^0.3"
 toml = "^0.10.0"
